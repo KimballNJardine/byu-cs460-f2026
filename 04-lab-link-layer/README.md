@@ -373,13 +373,15 @@ directory:
 ./driver.py
 ```
 
-Note that the driver can produce inconsistent results. Please know that *we will use great care in grading*, and if you have concerns you can reach out to the professor or the TAs.
+Note that the driver can produce inconsistent results. Please know that *we
+will use great care in grading*, and if you have concerns you can reach out to
+the professor or the TAs.
 
-If you're having issues with the driver, you can run the driver in verbose 
-mode by adding the `-v` option to the command above. This prints your
-Cougarnet output along with your results. 
-You can also add the `--terminal` option and open terminals for the 
-virtual hosts while the driver runs.
+If you're having issues with the driver, you can run the driver in verbose mode
+by adding the `-v` option to the command above. This prints your Cougarnet
+output along with your results.  You can also add the `--terminal` option and
+open terminals for the virtual hosts while the driver runs.
+
 
 # Evaluation
 

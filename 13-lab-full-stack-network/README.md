@@ -20,7 +20,10 @@ and communicate over that path from socket to socket, process to process.
    - [Integrate TCP Socket Functionality](#integrate-tcp-socket-functionality)
    - [Integrate Layer-2 Switching](#integrate-layer-2-switching)
  - [Testing](#testing)
+<<<<<<< HEAD
  - [Evaluation](#evaluation)
+=======
+>>>>>>> 65d9b7d (Update README.md)
  - [Submission](#submission)
 
 
@@ -86,7 +89,11 @@ To test the functionality of subnet-level broadcasts with the help of your
 forwarding table, you can run the following:
 
 ```bash
+<<<<<<< HEAD
 cougarnet --disable-ipv6 --terminal=a,b,r1 scenario1.cfg
+=======
+$ cougarnet --disable-ipv6 --terminal=a,b,r1 scenario1.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 At five seconds, a single ICMP packet is sent from host `a` to the broadcast IP
@@ -99,7 +106,11 @@ To test the functionality of your forwarding table more generally, you can run
 the following:
 
 ```bash
+<<<<<<< HEAD
 cougarnet --disable-ipv6 scenario2.cfg
+=======
+$ cougarnet --disable-ipv6 scenario2.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 With this configuration, routers `r1` through `r4` run your implementation for
@@ -152,7 +163,11 @@ should show that each of these was received by the destination.
 To test routing using your own forwarding table, you can run the following:
 
 ```bash
+<<<<<<< HEAD
 cougarnet --disable-ipv6 scenario3.cfg
+=======
+$ cougarnet --disable-ipv6 scenario3.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 With this configuration, routers `r1` through `r4` run your implementation for
@@ -215,7 +230,11 @@ To test TCP connectivity between hosts separated by multiple routers, you can
 run the following:
 
 ```bash
+<<<<<<< HEAD
 cougarnet --disable-ipv6 scenario4.cfg
+=======
+$ cougarnet --disable-ipv6 scenario4.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 The scripts associated with this configuration do the following:
@@ -256,7 +275,11 @@ With your own switch in place, you are now ready to test the functionality of
 the network stack that you created, piece by piece.  Run the following:
 
 ```bash
+<<<<<<< HEAD
 cougarnet --disable-ipv6 scenario5.cfg
+=======
+$ cougarnet --disable-ipv6 scenario5.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 The behavior associated with `scenario5.cfg` is exactly the same as that of

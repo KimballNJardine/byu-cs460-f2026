@@ -117,8 +117,13 @@ start it up:
 
 Run the following command:
 
+<<<<<<< HEAD
 ```bash
 cougarnet --disable-ipv6 --display scenario1.cfg
+=======
+```
+$ cougarnet --disable-ipv6 --display scenario1.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 After a few seconds of awkward silence, you will see output on the terminal
@@ -316,8 +321,13 @@ the cougarnet output matches appropriately.
 
 When it is working properly, test also with the `--terminal=none` option:
 
+<<<<<<< HEAD
 ```bash
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+=======
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 
@@ -439,12 +449,20 @@ before you begin, as it might be easier for you to do one before the other.
     see how they are called and what correct output looks.  Additionally, you
     can test functionality with the following command:
 
+<<<<<<< HEAD
     ```bash
+=======
+    ```
+>>>>>>> 65d9b7d (Update README.md)
     python3 -m doctest prefix.py
     ```
 
     At this point, the following should run without error (and without output):
+<<<<<<< HEAD
     ```bash
+=======
+    ```
+>>>>>>> 65d9b7d (Update README.md)
     python3 -m doctest prefix.py
     ```
 
@@ -457,7 +475,11 @@ before you begin, as it might be easier for you to do one before the other.
 
     - The return values in the doc tests must be correct; and
     - The following should run without error (and without output):
+<<<<<<< HEAD
       ```bash
+=======
+      ```
+>>>>>>> 65d9b7d (Update README.md)
       python3 -m doctest prefix.py
       ```
 
@@ -484,7 +506,11 @@ before you begin, as it might be easier for you to do one before the other.
 
     - The return values in the doc tests must be correct; and
     - The following should run without error (and without output):
+<<<<<<< HEAD
     ```bash
+=======
+    ```
+>>>>>>> 65d9b7d (Update README.md)
     python3 -m doctest forwarding_table.py
     ```
 
@@ -516,8 +542,13 @@ functionality.  Your focus is on the host/router functionality.
 Take a look at the contents of `scenario2.cfg`.  Then run the following to
 start it up:
 
+<<<<<<< HEAD
 ```bash
 cougarnet --disable-ipv6 scenario2.cfg
+=======
+```
+$ cougarnet --disable-ipv6 scenario2.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 After a few seconds of awkward silence, you will see output on the terminal
@@ -722,8 +753,13 @@ the cougarnet output matches appropriately.
 
 When it is working properly, test also with the `--terminal=none` option:
 
+<<<<<<< HEAD
 ```bash
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+=======
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 
@@ -777,7 +813,11 @@ testing of parts 1 and 3.  This is not a replacement for manual testing but can
 be used as a sanity check.  You can use it by simply running the following in
 the working directory:
 
+<<<<<<< HEAD
 ```bash
+=======
+```
+>>>>>>> 65d9b7d (Update README.md)
 ./driver.py
 ```
 
@@ -797,6 +837,7 @@ following distribution:
  - Part 2: 32 points
    - 8 points for correct doctests in `prefix.py`
    - 8 points for running the following without error:
+<<<<<<< HEAD
      ```bash
      python -m doctest prefix.py
      ```
@@ -804,6 +845,15 @@ following distribution:
    - 8 points for running the following without error:
      ```bash
      python -m doctest forwarding_table.py
+=======
+     ```
+     $ python -m doctest prefix.py
+     ```
+   - 8 points for correct doctests in `forwarding_table.py`
+   - 8 points for running the following without error:
+     ```
+     $ python -m doctest forwarding_table.py
+>>>>>>> 65d9b7d (Update README.md)
      ```
  - Part 3: 28 points
    - 22 points for first 11 tests (2 points each)
@@ -849,9 +899,15 @@ working `switch.py` from the
 [Link Layer Lab](../04-lab-link-layer/) into your current directory.  Then run
 the following:
 
+<<<<<<< HEAD
 ```bash
 cougarnet --disable-ipv6 --terminal=none scenario1-mine.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2-mine.cfg
+=======
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario1-mine.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario2-mine.cfg
+>>>>>>> 65d9b7d (Update README.md)
 ```
 
 Yep, that is all your software moving around real frames and packets!

@@ -373,6 +373,7 @@ ping -c 1 -W 1 -t 3 10.0.1.2
 ```bash
 ping -c 1 -W 1 10.0.1.4
 ```
+
  27. Which device sent the ICMP message?
  28. What was the cause of the ICMP message?
 
@@ -380,6 +381,7 @@ ping -c 1 -W 1 10.0.1.4
 ```bash
 ping -c 1 -W 1 10.0.3.1
 ```
+
  29. Which device sent the ICMP message?
  30. What was the cause of the ICMP message?
 
