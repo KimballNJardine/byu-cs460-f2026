@@ -118,6 +118,7 @@ sudo pip3 install --root-user-action ignore --break-system-packages .
 
 2. Complete the six
    [Working Examples](https://github.com/cdeccio/cougarnet/blob/main/README.md#working-examples)
-   It's okay if the examples don't make much sense at the moment.  We will be covering these concepts
-   in great detail in future coursework.  The idea here is to expose you to the toolset and to make
-   sure that your installation is working properly.
+   Please note that you might not understand much what you are looking at in these exercises.
+   We will be covering these concepts in great detail in future coursework. The idea here is to
+   expose you to the Cougarnet framework and to make sure that your installation is working
+   properly.
