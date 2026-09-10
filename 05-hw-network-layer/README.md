@@ -358,7 +358,7 @@ By default, all terminals will show up, but you can adjust this with the
 
 Run the following to send an ICMP echo request/reply between `h1` and `h2`:
 
-```
+```bash
 # h1$
 ping -c 1 -W 1 10.0.1.2
 ```
@@ -373,7 +373,7 @@ For each part of this problem, run the given command from `h1`, look at the
 Wireshark capture, and then respond with 1) the host or router the sent the
 ICMP error and 2) a *brief* description of why the ICMP error was sent.
 
-```
+```bash
 # h1$
 ping -c 1 -W 1 -t 3 10.0.1.2
 ```
@@ -383,7 +383,7 @@ ping -c 1 -W 1 -t 3 10.0.1.2
  25. Which device sent the ICMP message?
  26. What was the cause of the ICMP message?
 
-```
+```bash
 # h1$
 ping -c 1 -W 1 10.0.1.4
 ```
@@ -391,14 +391,14 @@ ping -c 1 -W 1 10.0.1.4
  28. What was the cause of the ICMP message?
 
 
-```
+```bash
 # h1$
 ping -c 1 -W 1 10.0.3.1
 ```
  29. Which device sent the ICMP message?
  30. What was the cause of the ICMP message?
 
-```
+```bash
 # h1$
 dig @10.0.1.2 +timeout=1 +tries=1 . NS
 ```
@@ -413,7 +413,7 @@ on `h2`. :))
 Run the following command from `h1`, which, sends an ICMP echo request of size
 1500 to 10.0.1.2:
 
-```
+```bash
 # h1$
 ping -c 1 -W 1 -s 1500 -M dont 10.0.1.2
 ```
