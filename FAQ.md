@@ -8,14 +8,14 @@
    the host using VirtualBox).  To fix things, do the following:
 
    1. Clone Cougarnet outside the shared folder.  For example:
-      ```
+      ```bash
       # $
       cd ~/
       git clone https://github.com/cdeccio/cougarnet
       ```
 
    2. Enter the directory, and build/install from there:
-      ```
+      ```bash
       # $
       cd cougarnet
       python3 setup.py build
