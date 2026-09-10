@@ -696,7 +696,7 @@ should see output for a similar exchange between hosts `c` and `b`.
 When it is working properly, test also with the `--terminal=none` option, and
 make sure it works for both scenarios:
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
@@ -794,7 +794,7 @@ Test your implementation against scenarios 1 and 2.  Where you previously
 received no response from the server after sending a packet that did not match
 any socket, you should now see responses from the server.
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
