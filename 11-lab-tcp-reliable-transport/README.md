@@ -663,7 +663,7 @@ and the sequence number that corresponds to bytes that have sent by its peer.
 The former is stored as the instance variable `seq`, and the latter is stored
 as the instance variable `ack`.  They are initialized as follows:
 
-```
+```python
 self.seq = self.base_seq_self + 1
 self.ack = self.base_seq_other + 1
 ```
@@ -699,7 +699,7 @@ but your code should get past this okay.
 First, test your TCP implementation to transfer the very small file `hello.txt`
 over the TCP connection:
 
-```
+```bash
 # $
 cougarnet --wireshark a-b --vars loss=0,window=10000,file=hello.txt,fast_retransmit=off scenario1.cfg
 ```
@@ -709,14 +709,14 @@ course, in a single window).  Check the wireshark output to make sure the
 sequence, acknowledgment numbers, and segment lengths look correct.  Then check
 that it was actually received properly:
 
-```
+```bash
 # $
 cat downloads/hello.txt
 ```
 ```
 hello world
 ```
-```
+```bash
 # $
 sha1sum hello.txt downloads/hello.txt
 ```
@@ -731,7 +731,7 @@ Now, test your TCP implementation to transfer the much larger `test.txt` over
 the TCP connection without any loss using a fixed congestion window size of
 10,000 bytes:
 
-```
+```bash
 # $
 cougarnet --wireshark a-b --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
@@ -741,7 +741,7 @@ cougarnet --wireshark a-b --vars loss=0,window=10000,file=test.txt,fast_retransm
 The file should transfer in no more than a second or two, and it should be in
 tact:
 
-```
+```bash
 # $
 sha1sum test.txt downloads/test.txt
 ```
@@ -752,14 +752,14 @@ e742dc9de5bac34d82117e015f597378a205e5c1  downloads/test.txt
 
 When this is working, test on an even larger file, `byu-y-mtn.jpg`:
 
-```
+```bash
 # $
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
 This one should transfer in roughly 15 seconds and should also be in tact:
 
-```
+```bash
 # $
 sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 ```
@@ -771,7 +771,7 @@ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 Finally, transfer the image file again with a larger window size of 50,000
 bytes:
 
-```
+```bash
 # $
 cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
@@ -788,7 +788,7 @@ increase.
 Test your TCP implementation to transfer the file `test.txt` over the
 TCP connection with a 5% loss rate each direction:
 
-```
+```bash
 # $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
@@ -799,7 +799,7 @@ it might take 10 - 15 seconds with the timeouts and retransmissions
 When this is working, test on a larger file, `byu-y-mtn.jpg`, with lower loss
 rate and larger congestion window:
 
-```
+```bash
 # $
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
@@ -814,7 +814,7 @@ retransmissions.
 When transmissions are working, with and without loss, make sure they are all
 working with the `--terminal=none` option:
 
-```
+```bash
 # $
 cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
@@ -846,7 +846,7 @@ repeated until a new, larger acknowledgment is received.
 Test your fast retransmit functionality, but first running the tests without
 packet loss, to make sure they still work as expected:
 
-```
+```bash
 # $
 cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
@@ -855,7 +855,7 @@ cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --ter
 
 Running the tests with packet loss _should_ result in faster transmission times:
 
-```
+```bash
 # $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on scenario1.cfg
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scenario1.cfg
@@ -864,7 +864,7 @@ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scena
 Specifically, the file `test.txt` should transfer in no more than a second or
 two, and it should be in tact:
 
-```
+```bash
 # $
 sha1sum test.txt downloads/test.txt
 ```
@@ -882,7 +882,7 @@ the very least, however, the transfer time should not be expected to increase.
 
 Also, the file should be in tact:
 
-```
+```bash
 # $
 sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 ```
@@ -893,7 +893,7 @@ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 
 Finally test with the `--terminal=none` option:
 
-```
+```bash
 # $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
@@ -951,7 +951,7 @@ you to specify a congestion control algorithm on the command line, e.g.,
 
 Run the following command to run the file transfer with no loss:
 
-```
+```bash
 # $
 cougarnet --wireshark a-b --vars loss=0,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
@@ -974,7 +974,7 @@ If everything looks good, click "Save As...", and save the file as
 
 Now run the following command to test with 0.1% loss:
 
-```
+```bash
 # $
 cougarnet --wireshark a-b --vars loss=0.1,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
