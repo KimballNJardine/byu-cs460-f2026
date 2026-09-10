@@ -9,15 +9,17 @@
 
    1. Clone Cougarnet outside the shared folder.  For example:
       ```
-      $ cd ~/
-      $ git clone https://github.com/cdeccio/cougarnet
+      # $
+      cd ~/
+      git clone https://github.com/cdeccio/cougarnet
       ```
 
    2. Enter the directory, and build/install from there:
       ```
-      $ cd cougarnet
-      $ python3 setup.py build
-      $ sudo python3 setup.py install
+      # $
+      cd cougarnet
+      python3 setup.py build
+      sudo python3 setup.py install
       ```
       Note that `~/` is the user's home directory, and I wouldn't expect this
       to be a shared folder.
