@@ -22,7 +22,7 @@ TCP Fast Open (TFO).
 
 Make sure that `curl` is installed.
 
-```
+```bash
 # $
 sudo apt install curl
 ```
