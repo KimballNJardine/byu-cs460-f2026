@@ -45,7 +45,7 @@ the routes learned.
 
 Install [pyroute2](https://pyroute2.org/) by running the following:
 
-```
+```bash
 # $
 sudo apt install python3-pyroute2
 ```
@@ -99,7 +99,7 @@ The files given to you for this lab are the following:
 Take a look at the contents of `scenario1a.cfg`.  Then run the following to
 start it up:
 
-```
+```bash
 # $
 cougarnet --display --disable-ipv6 scenario1a.cfg
 ```
@@ -158,7 +158,7 @@ on each router / virtual host.
 Now look at the contents of `scenario1.cfg`, and run the following to start it
 up:
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 scenario1.cfg
 ```
@@ -554,7 +554,7 @@ You should not call `send_dv()` or `update_dv()` anywhere else in your code.
 
 Test your implementation against scenario 1:
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --stop=30 scenario1.cfg
 ```
@@ -571,14 +571,14 @@ interrupt, the `--stop` argument will help get it under control.
 
 When it is working properly, test also with the `--terminal=none` option:
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
 Then proceed to test scenarios 2 and 3.
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --stop=30 scenario2.cfg
 cougarnet --disable-ipv6 --stop=50 scenario3.cfg
@@ -586,7 +586,7 @@ cougarnet --disable-ipv6 --stop=50 scenario3.cfg
 
 When all are working properly, test also with the `--terminal=none` option:
 
-```
+```bash
 # $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
@@ -601,7 +601,7 @@ testing.  This is not a replacement for manual testing but can be used as a
 sanity check.  You can use it by simply running the following in the working
 directory:
 
-```
+```bash
 ./driver.py
 ```
 
@@ -667,7 +667,7 @@ testing.  This is not a replacement for manual testing but can be used as a
 sanity check.  You can use it by simply running the following in the working
 directory:
 
-```
+```bash
 ./driver.py
 ```
 
