@@ -295,7 +295,7 @@ lesser credit.
 Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
-```
+```bash
 # $
 mkdir full-stack-lab
 cp buffer.py dvrouter.py forwarding_table.py headers.py host.py mysocket.py prefix.py switch.py transporthost.py full-stack-lab
