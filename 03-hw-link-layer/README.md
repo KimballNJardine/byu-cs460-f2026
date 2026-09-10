@@ -210,24 +210,24 @@ sudo ovs-appctl fdb/flush s2
  13. Now stop (`Ctrl`-`c`) the network and re-start a variant of the previous
      configuration with:
 
-    ```bash
-    # $
-    cougarnet --display --disable-ipv6 h6-s2.cfg
-    ```
+     ```bash
+     # $
+     cougarnet --display --disable-ipv6 h6-s2.cfg
+     ```
 
      Now run the following from host `b`:
 
-    ```bash
-    # b$
-    ping -c 5 -W 1 10.0.0.5
-    ```
+     ```bash
+     # b$
+     ping -c 5 -W 1 10.0.0.5
+     ```
 
      Then:
 
-    ```bash
-    # b$
-    ping -c 5 -W 1 10.0.0.3
-    ```
+     ```bash
+     # b$
+     ping -c 5 -W 1 10.0.0.3
+     ```
 
      What are the results of pinging `e` (10.0.0.5) and pinging `c` (10.0.0.3)?
 
