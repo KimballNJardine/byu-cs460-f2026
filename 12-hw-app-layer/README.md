@@ -167,7 +167,7 @@ provide a brief but specific explanation.
 
  1. Revert to your backup of `/etc/hosts`:
 
-    ```
+    ```bash
     sudo mv /etc/hosts{.bak,}
     ```
 
@@ -309,7 +309,7 @@ This part is an exercise to help you understand SMTP.
 
  1. Install swaks (Swiss Army Knife SMTP). Run the following to install swaks:
 
-    ```
+    ```bash
     sudo apt install swaks
     ```
 
