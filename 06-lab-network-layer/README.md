@@ -118,7 +118,8 @@ start it up:
 Run the following command:
 
 ```
-$ cougarnet --disable-ipv6 --display scenario1.cfg
+# $
+cougarnet --disable-ipv6 --display scenario1.cfg
 ```
 
 After a few seconds of awkward silence, you will see output on the terminal
@@ -317,7 +318,8 @@ the cougarnet output matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```
-$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+# $
+cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
 
@@ -517,7 +519,8 @@ Take a look at the contents of `scenario2.cfg`.  Then run the following to
 start it up:
 
 ```
-$ cougarnet --disable-ipv6 scenario2.cfg
+# $
+cougarnet --disable-ipv6 scenario2.cfg
 ```
 
 After a few seconds of awkward silence, you will see output on the terminal
@@ -723,7 +726,8 @@ the cougarnet output matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```
-$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+# $
+cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 ```
 
 
@@ -798,12 +802,14 @@ following distribution:
    - 8 points for correct doctests in `prefix.py`
    - 8 points for running the following without error:
      ```
-     $ python -m doctest prefix.py
+     # $
+     python -m doctest prefix.py
      ```
    - 8 points for correct doctests in `forwarding_table.py`
    - 8 points for running the following without error:
      ```
-     $ python -m doctest forwarding_table.py
+     # $
+     python -m doctest forwarding_table.py
      ```
  - Part 3: 28 points
    - 22 points for first 11 tests (2 points each)
@@ -850,8 +856,9 @@ working `switch.py` from the
 the following:
 
 ```
-$ cougarnet --disable-ipv6 --terminal=none scenario1-mine.cfg
-$ cougarnet --disable-ipv6 --terminal=none scenario2-mine.cfg
+# $
+cougarnet --disable-ipv6 --terminal=none scenario1-mine.cfg
+cougarnet --disable-ipv6 --terminal=none scenario2-mine.cfg
 ```
 
 Yep, that is all your software moving around real frames and packets!
@@ -913,7 +920,8 @@ proceed with checking your ARP table and sending an ARP request, if necessary.
 To test your handling of IP subnet-level broadcasts, use the following: 
 
 ```
-$ cougarnet --disable-ipv6 --terminal=none scenario3-opt.cfg
+# $
+cougarnet --disable-ipv6 --terminal=none scenario3-opt.cfg
 ```
 
 This is the same topology as that used 
@@ -936,7 +944,8 @@ Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
 ```
-$ mkdir network-lab
-$ cp host.py prefix.py forwarding_table.py network-lab
-$ tar -zcvf network-lab.tar.gz network-lab
+# $
+mkdir network-lab
+cp host.py prefix.py forwarding_table.py network-lab
+tar -zcvf network-lab.tar.gz network-lab
 ```
