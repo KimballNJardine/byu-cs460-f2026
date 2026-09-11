@@ -29,7 +29,6 @@ VLAN 30.
 Run the following command to create and start the network:
 
 ```bash
-# $
 cougarnet --wireshark a-s1,b-s1,c-s1,d-s2,e-s2,f-s2,s1-s2 --display --disable-ipv6 h6-s2-vlan.cfg
 ```
 
@@ -61,7 +60,6 @@ to focus on the link layer.
 Run the following in host `b`:
 
 ```bash
-# b$
 sudo ip neigh add 10.0.0.5 lladdr 00:00:00:ee:ee:ee dev b-s1
 sudo iptables -I INPUT -j DROP
 ```
@@ -71,7 +69,6 @@ sudo iptables -I INPUT -j DROP
 and run the following in host `e`:
 
 ```bash
-# e$
 sudo ip neigh add 10.0.0.2 lladdr 00:00:00:bb:bb:bb dev e-s2
 sudo iptables -I INPUT -j DROP
 ```
@@ -88,7 +85,6 @@ Finally, reset the MAC address tables in each of the switches by running the
 following from the `s1` terminal:
 
 ```bash
-# s1$
 sudo ovs-appctl fdb/flush s1
 sudo ovs-appctl fdb/flush s2
 ```
@@ -100,7 +96,6 @@ sudo ovs-appctl fdb/flush s2
     tables:
 
     ```bash
-    # s1$
     sudo ovs-appctl fdb/show s1
     sudo ovs-appctl fdb/show s2
     ```
@@ -112,7 +107,6 @@ sudo ovs-appctl fdb/flush s2
  3. Run the following command on `b` to send a single frame from `b` to `e`:
 
     ```bash
-    # b$
     ping -c 1 -W 1 10.0.0.5
     ```
 
@@ -141,7 +135,6 @@ sudo ovs-appctl fdb/flush s2
     tables:
 
     ```bash
-    # s1$
     sudo ovs-appctl fdb/show s1
     sudo ovs-appctl fdb/show s2
     ```
@@ -157,7 +150,6 @@ sudo ovs-appctl fdb/flush s2
  8. Run the following command on `e` to send a single frame from `e` to `b`:
 
     ```bash
-    # e$
     ping -c 1 -W 1 10.0.0.2
     ```
 
@@ -169,7 +161,6 @@ sudo ovs-appctl fdb/flush s2
     tables:
 
     ```bash
-    # s1$
     sudo ovs-appctl fdb/show s1
     sudo ovs-appctl fdb/show s2
     ```
@@ -183,7 +174,6 @@ sudo ovs-appctl fdb/flush s2
      the following:
 
     ```bash
-    # $
     cougarnet --display --disable-ipv6 h6-s2-vlan.cfg
     ```
 
@@ -192,14 +182,12 @@ sudo ovs-appctl fdb/flush s2
      Now run the following from host `b`:
 
     ```bash
-    # b$
     ping -c 5 -W 1 10.0.0.5
     ```
 
      Then:
 
     ```bash
-    # b$
     ping -c 5 -W 1 10.0.0.3
     ```
 
@@ -211,21 +199,18 @@ sudo ovs-appctl fdb/flush s2
      configuration with:
 
      ```bash
-     # $
      cougarnet --display --disable-ipv6 h6-s2.cfg
      ```
 
      Now run the following from host `b`:
 
      ```bash
-     # b$
      ping -c 5 -W 1 10.0.0.5
      ```
 
      Then:
 
      ```bash
-     # b$
      ping -c 5 -W 1 10.0.0.3
      ```
 
