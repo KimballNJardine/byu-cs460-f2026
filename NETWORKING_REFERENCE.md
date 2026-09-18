@@ -2,36 +2,6 @@
 
 This is a consolidated, editable reference for the packet structures and implementation helps used throughout the course. The diagrams describe the bytes handled by the labs, not every field that appears on a physical network.
 
-
-
-## 2. Layered Packet Overview
-
-### Endianness
-
-In this class, **network byte order** will be used, which is **big-endian**. You likely will not have to worry about this at all in this class, but this needs to be noted.
-
-Examples below use the same numeric value in both byte orders. The bit order within each byte does not change; only the order of complete bytes changes.
-
-| Value size | Numeric value | Big-endian bytes | Little-endian bytes |
-| --- | --- | --- | --- |
-| 1 byte | `0x12` | `12` | `12` |
-| 2 bytes | `0x1234` | `12 34` | `34 12` |
-| 4 bytes | `0x12345678` | `12 34 56 78` | `78 56 34 12` |
-
-For example, the 16-bit value `0x1234` is transmitted as `12 34` in network byte order. Optional further reading: [Endianness - Wikipedia](https://en.wikipedia.org/wiki/Endianness).
-
-### Layering Options
-
-These are the main protocol combinations used in the labs:
-
-```text
-Ethernet Frame -> IPv4 -> UDP
-Ethernet Frame -> IPv4 -> TCP
-Ethernet Frame -> ARP
-```
-
-Note that you may not construct these full combinations. For instance, in the first lab, link-layer, you will only construct the Ethernet Frame - no payload inside it. However, it is important to remember how the OSI model behind this uses abstraction layers.
-
 ### Standalone Bit Layouts
 
 Each protocol layout is shown separately below. The columns are bit positions within a 32-bit row; fields are labeled above the space they occupy.
@@ -48,7 +18,7 @@ Each protocol layout is shown separately below. The columns are bit positions wi
 
 <table border="1">
 <tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
-<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q tag</td><td colspan="1">EtherType</td></tr>
+<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q Header</td><td colspan="1">EtherType</td></tr>
 </table>
 
 
@@ -114,19 +84,26 @@ An Ethernet frame also has a preamble and CRC. However, for this class you do no
 
 The following diagram uses 16-bit columns to show the bit widths of the Ethernet fields. The first row is the ordinary frame; the second row shows the tagged form.
 
+#### Ethernet frame
+
 <table border="1">
-<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
-<tr><td colspan="3">Destination MAC address</td><td colspan="3">Source MAC address</td><td>EtherType</td></tr>
-<tr><td colspan="3">Destination MAC address</td><td colspan="3">Source MAC address</td><td colspan="2">802.1Q header</td><td>EtherType</td></tr>
+<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th></tr>
+<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="1">EtherType</td></tr>
 </table>
 
-The ordinary frame has 112 bits before its payload. The VLAN-tagged frame has 144 bits before its payload.
+
+#### 802.1Q VLAN Ethernet frame
+
+<table border="1">
+<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
+<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q Header</td><td colspan="1">EtherType</td></tr>
+</table>
 
 #### Worked VLAN frame example
 
 Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, VLAN ID `25`, and IPv4 EtherType `0x0800`.
 
-Bytes for each field (network byte order is big-endian):
+**Bytes for each field (network byte order is big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -161,7 +138,7 @@ Expansion:
 
 Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, and IPv4 EtherType `0x0800`. This frame has no 802.1Q header.
 
-Bytes for each field (network byte order is big-endian):
+**Bytes for each field (network byte order is big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -227,11 +204,7 @@ Bit-level ARP layout, using the same 32-bit rows as the lab README:
 
 Example values: Ethernet/IPv4 request, sender MAC `02:00:00:00:00:01`, sender IP `192.0.2.1`, target MAC all zeroes, and target IP `192.0.2.2`.
 
-**Optional shared-byte note:** ARP bytes 06 04 00 01 contain hardware address length 06, protocol address length 04, and opcode 00 01.
-
-
-
-Bytes for each field (all multi-byte fields are in network byte order, big-endian):
+**Bytes for each field (all multi-byte fields are in network byte order, big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -250,6 +223,8 @@ Bytes for each field (all multi-byte fields are in network byte order, big-endia
 <tr><th colspan="4">Target protocol address</th></tr>
 <tr><td>c0</td><td>00</td><td>02</td><td>02</td></tr>
 </table>
+
+**Shared byte note:** ARP bytes ``06 04 00 01`` contain hardware address length ``06``, protocol address length ``04``, and opcode ``00 01``.
 
 Bytes, in network byte order (big-endian):
 
@@ -280,7 +255,8 @@ An IPv4 datagram consists of an IPv4 header followed by its payload. The minimum
 | --- | ---: | --- |
 | Version | 4 bits | IPv4 value is 4 |
 | IHL | 4 bits | Header length in 32-bit words; 5 means 20 bytes |
-| DSCP/ECN | 1 byte | Usually not used in these labs |
+| DSCP | 6 bits | In this class, set to 0 |
+| ECN | 2 bits | In this class, set to 0 |
 | Total length | 2 bytes | IPv4 header plus payload |
 | Identification | 2 bytes | Fragmentation support |
 | Flags | 3 bits | Fragmentation control |
@@ -297,7 +273,7 @@ Bit-level IPv4 header layout for the minimum 20-byte header:
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><td colspan="4">Version</td><td colspan="4">IHL</td><td colspan="8">DSCP/ECN</td><td colspan="16">Total length</td></tr>
+<tr><td colspan="4">Version</td><td colspan="4">IHL</td><td colspan="6">DSCP</td><td colspan="2">ECN</td><td colspan="16">Total length</td></tr>
 <tr><td colspan="16">Identification</td><td colspan="3">Flags</td><td colspan="13">Fragment offset</td></tr>
 <tr><td colspan="8">TTL</td><td colspan="8">Protocol</td><td colspan="16">Header checksum</td></tr>
 <tr><td colspan="32">Source address</td></tr>
@@ -309,11 +285,7 @@ Bit-level IPv4 header layout for the minimum 20-byte header:
 
 Example values: no options, total length `33` bytes, identification `0x1234`, do-not-fragment flag set, TTL `64`, UDP protocol `17`, source `192.0.2.1`, and destination `192.0.2.2`. The checksum below is shown as zero to keep the example focused on layout.
 
-**Optional shared-byte note:** IPv4 byte 45 contains Version 4 and IHL 5. Bytes 40 00 contain Flags and Fragment Offset. Bytes 40 11 contain TTL and Protocol.
-
-
-
-Bytes for each field (multi-byte fields are in network byte order, big-endian):
+**Bytes for each field (multi-byte fields are in network byte order, big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -328,6 +300,8 @@ Bytes for each field (multi-byte fields are in network byte order, big-endian):
 <tr><th colspan="4">Destination address</th></tr>
 <tr><td>c0</td><td>00</td><td>02</td><td>02</td></tr>
 </table>
+
+**Shared byte note:** IPv4 byte ``45`` contains Version ``4`` and IHL ``5``. Byte ``00`` for DSCP/ECN is just `0` for DSCP and ``0`` for ECN. Bytes ``40 00`` are ``0100000000000000``: the first 3 bits, ``010``, are the Flags (Reserved ``0``, Don't Fragment/DF ``1``, More Fragments/MF ``0``), and the remaining 13 bits are the Fragment Offset, ``0``.
 
 Bytes, in network byte order (big-endian):
 
@@ -374,11 +348,7 @@ Bit-level UDP header layout:
 
 Example values: source port `4000`, destination port `1234`, payload `hello` (5 bytes), length `13`, and checksum `0`.
 
-**Optional shared-byte note:** UDP fields are byte-aligned: source port 0f a0, destination port 04 d2, length 00 0d, checksum 00 00. No UDP header byte is split between fields.
-
-
-
-Bytes for each field (multi-byte fields are in network byte order, big-endian):
+**Bytes for each field (multi-byte fields are in network byte order, big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -444,11 +414,7 @@ Bit-level TCP header layout for the minimum 20-byte header:
 
 Example values: source port `4000`, destination port `1234`, sequence `1`, acknowledgment `1`, data offset `5`, flags `ACK+SYN`, window `64`, checksum `0`, urgent pointer `0`, and data `hello`.
 
-**Optional shared-byte note:** TCP bytes 50 92 00 40 group Data Offset, Reserved, ECN, Control Bits, and Window.
-
-
-
-Bytes for each field (multi-byte fields are in network byte order, big-endian):
+**Bytes for each field (multi-byte fields are in network byte order, big-endian):**
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
@@ -458,7 +424,7 @@ Bytes for each field (multi-byte fields are in network byte order, big-endian):
 <tr><td>00</td><td>00</td><td>00</td><td>01</td></tr>
 <tr><th colspan="4">Acknowledgment number</th></tr>
 <tr><td>00</td><td>00</td><td>00</td><td>01</td></tr>
-<tr><th colspan="4">Data offset / Reserved / ECN / Control bits / Window</th></tr>
+<tr><th colspan="2">Data offset / Reserved / ECN / Control bits</th><th colspan="2">Window</th></tr>
 <tr><td>50</td><td>92</td><td>00</td><td>40</td></tr>
 <tr><th colspan="2">Checksum</th><th colspan="2">Urgent pointer</th></tr>
 <tr><td>00</td><td>00</td><td>00</td><td>00</td></tr>
@@ -467,6 +433,8 @@ Bytes for each field (multi-byte fields are in network byte order, big-endian):
 <tr><th colspan="1">Data (byte 4)</th></tr>
 <tr><td>6f</td></tr>
 </table>
+
+**Shared byte note:** TCP bytes ``50 92`` contain the packed fields: Data Offset ``0101`` = 5 words (20 bytes), Reserved ``000`` = 0, ECN ``010``, and Control Bits ``010010`` = ACK + SYN (using the order URG, ACK, PSH, RST, SYN, FIN). The packed fields concatenate as ``0101 000 010 010010`` or ``0101000010010010``.
 
 Header bytes, in network byte order (big-endian), followed by the data bytes:
 
@@ -599,19 +567,6 @@ The complete transmitted bytes, omitting the physical Ethernet preamble and CRC 
 0f a0 04 d2 00 0d 00 00 68 65 6c 6c 6f
 ```
 
-### Step 5: Receive and unwrap
-
-The receiver reverses the construction sequence:
-
-```text
-1. Ethernet checks the destination MAC and EtherType, then removes the frame header.
-2. IPv4 checks the destination IP and protocol value, then removes the IPv4 header.
-3. UDP checks the destination port and length, then removes the UDP header.
-4. The application receives b'hello'.
-```
-
-A router performs the Ethernet receive and IPv4 forwarding steps, but does not remove the UDP header. It chooses the next interface, resolves the next-hop MAC with ARP, and creates a new Ethernet frame around the same IPv4 datagram.
-
 ## 12. Constants and Conversions
 
 | Item | Value |
@@ -631,14 +586,30 @@ A router performs the Ethernet receive and IPv4 forwarding steps, but does not r
 
 Use binary/network representations on the wire and presentation strings in configuration, logs, and user-facing output.
 
-## 13. Common Pitfalls
+## 13. Various Notes
 
-- Do not include Ethernet preamble or CRC when parsing the raw-socket frame used by the labs.
-- Do not confuse the 4-byte 802.1Q header with the 2-byte EtherType that follows it.
-- The UDP length includes both the UDP header and its data; IPv4 total length includes the IPv4 header and its payload.
-- The IPv4 header checksum covers the IPv4 header, while the transport lab uses zero for TCP and UDP checksums.
-- TCP sequence numbers count bytes, not packets.
-- TCP `Data Offset` counts 4-byte words, not bytes.
-- Forwarding requires longest-prefix match, not simply the first matching table entry.
-- A directly connected route has no explicit next-hop IP; ARP resolves the final destination on that interface.
-- The starter files contain `pass` and `FIXME` sections by design. Confirm intended behavior in the corresponding README and tests before relying on an implementation stub.
+### Endianness
+
+In this class, **network byte order** will be used, which is **big-endian**. You likely will not have to worry about this at all in this class, but this needs to be noted.
+
+Examples below use the same numeric value in both byte orders. The bit order within each byte does not change; only the order of complete bytes changes.
+
+| Value size | Numeric value | Big-endian bytes | Little-endian bytes |
+| --- | --- | --- | --- |
+| 1 byte | `0x12` | `12` | `12` |
+| 2 bytes | `0x1234` | `12 34` | `34 12` |
+| 4 bytes | `0x12345678` | `12 34 56 78` | `78 56 34 12` |
+
+For example, the 16-bit value `0x1234` is transmitted as `12 34` in network byte order. Optional further reading: [Endianness - Wikipedia](https://en.wikipedia.org/wiki/Endianness).
+
+### Layering Options
+
+These are the main protocol combinations used in the labs:
+
+```text
+Ethernet Frame -> IPv4 -> UDP
+Ethernet Frame -> IPv4 -> TCP
+Ethernet Frame -> ARP
+```
+
+Note that you may not construct these full combinations. For instance, in the first lab, link-layer, you will only construct the Ethernet Frame - no payload inside it. However, it is important to remember how the OSI model behind this uses abstraction layers.
