@@ -2,42 +2,99 @@
 
 This is a consolidated, editable reference for the packet structures and implementation helps used throughout the course. The diagrams describe the bytes handled by the labs, not every field that appears on a physical network.
 
-## 1. Encapsulation at a Glance
 
-When application data travels between hosts, the layers wrap it from the inside out:
+
+## 2. Layered Packet Overview
+
+### Endianness
+
+In this class, **network byte order** will be used, which is **big-endian**. You likely will not have to worry about this at all in this class, but this needs to be noted.
+
+Examples below use the same numeric value in both byte orders. The bit order within each byte does not change; only the order of complete bytes changes.
+
+| Value size | Numeric value | Big-endian bytes | Little-endian bytes |
+| --- | --- | --- | --- |
+| 1 byte | `0x12` | `12` | `12` |
+| 2 bytes | `0x1234` | `12 34` | `34 12` |
+| 4 bytes | `0x12345678` | `12 34 56 78` | `78 56 34 12` |
+
+For example, the 16-bit value `0x1234` is transmitted as `12 34` in network byte order. Optional further reading: [Endianness - Wikipedia](https://en.wikipedia.org/wiki/Endianness).
+
+### Layering Options
+
+These are the main protocol combinations used in the labs:
 
 ```text
-Ethernet frame
-  +-- optional 802.1Q VLAN tag
-  +-- IPv4 header
-        +-- UDP header + application data
-        +-- TCP header + application data
+Ethernet Frame -> IPv4 -> UDP
+Ethernet Frame -> IPv4 -> TCP
+Ethernet Frame -> ARP
 ```
 
-At the receiving side, the headers are removed in the reverse order. A router normally removes and examines the Ethernet frame, processes the IPv4 header, then creates a new Ethernet frame for the next interface. The IP payload remains the transport segment unless the packet is delivered locally.
+Note that you may not construct these full combinations. For instance, in the first lab, link-layer, you will only construct the Ethernet Frame - no payload inside it. However, it is important to remember how the OSI model behind this uses abstraction layers.
 
-| Layer | Unit | Main addressing | Payload |
-| --- | --- | --- | --- |
-| Application | data/message | application-defined | user data |
-| Transport | UDP datagram or TCP segment | source/destination ports | application data |
-| Network | IPv4 datagram | source/destination IP addresses | UDP/TCP/other protocol |
-| Link | Ethernet frame | source/destination MAC addresses | IPv4, ARP, or another EtherType |
+### Standalone Bit Layouts
 
-## 2. Bytes and Network Order
+Each protocol layout is shown separately below. The columns are bit positions within a 32-bit row; fields are labeled above the space they occupy.
 
-The labs exchange raw Python `bytes` values. A `bytes` value is a sequence of byte values, not a text string.
+#### Ethernet frame
 
-```python
-frame = destination_mac + source_mac + ethertype + payload
-first_two = frame[:2]
-field = frame[12:14]
-```
+<table border="1">
+<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th></tr>
+<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="1">EtherType</td></tr>
+</table>
 
-- Slicing returns a new `bytes` value.
-- Byte strings can be concatenated with `+`.
-- Multi-byte protocol fields use network byte order, which is big-endian.
-- Python's `struct` format prefix for network order is `!`; for example, `struct.pack('!H', port)` packs a 16-bit unsigned integer.
-- Convert presentation strings and wire bytes with the provided address helpers rather than treating an IP or MAC string as its wire representation.
+
+#### 802.1Q VLAN Ethernet frame
+
+<table border="1">
+<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
+<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q tag</td><td colspan="1">EtherType</td></tr>
+</table>
+
+
+#### ARP packet
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="16">Hardware type</td><td colspan="16">Protocol type</td></tr>
+<tr><td colspan="8">Hardware address length</td><td colspan="8">Protocol address length</td><td colspan="16">Opcode</td></tr>
+<tr><td colspan="32">Sender hardware address</td></tr>
+<tr><td colspan="32">Sender protocol address</td></tr>
+<tr><td colspan="32">Target hardware address</td></tr>
+<tr><td colspan="32">Target protocol address</td></tr>
+<tr><td colspan="32">Data</td></tr>
+</table>
+
+#### IPv4 header
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="4">Version</td><td colspan="4">IHL</td><td colspan="8">DSCP/ECN</td><td colspan="16">Total length</td></tr>
+<tr><td colspan="16">Identification</td><td colspan="3">Flags</td><td colspan="13">Fragment offset</td></tr>
+<tr><td colspan="8">TTL</td><td colspan="8">Protocol</td><td colspan="16">Header checksum</td></tr>
+<tr><td colspan="32">Source address</td></tr>
+<tr><td colspan="32">Destination address</td></tr>
+</table>
+
+#### UDP header
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="16">Source port</td><td colspan="16">Destination port</td></tr>
+<tr><td colspan="16">Length</td><td colspan="16">Checksum</td></tr>
+</table>
+
+#### TCP header
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="16">Source port</td><td colspan="16">Destination port</td></tr>
+<tr><td colspan="32">Sequence number</td></tr>
+<tr><td colspan="32">Acknowledgment number</td></tr>
+<tr><td colspan="4">Data offset</td><td colspan="3">Reserved</td><td colspan="3">ECN</td><td colspan="6">Control bits</td><td colspan="16">Window</td></tr>
+<tr><td colspan="16">Checksum</td><td colspan="16">Urgent pointer</td></tr>
+<tr><td colspan="32">Options and padding</td></tr>
+</table>
 
 ## 3. Ethernet and VLAN Frames
 
@@ -49,40 +106,11 @@ The raw Ethernet frame received by these labs is:
 | --- | ---: | --- |
 | Destination MAC address | 6 bytes | Intended receiver; `ff:ff:ff:ff:ff:ff` is broadcast |
 | Source MAC address | 6 bytes | Sender on the local link |
+| 802.1Q header | 4 bytes | An optional tag to support VLANs |
 | EtherType | 2 bytes | Identifies the payload protocol |
 | Payload | variable | Usually an IPv4 datagram or ARP packet |
 
-Common EtherTypes:
-
-| EtherType | Meaning |
-| --- | --- |
-| `0x0800` | IPv4 |
-| `0x0806` | ARP |
-| `0x8100` | 802.1Q VLAN tag indicator |
-
-The physical Ethernet frame also has a preamble and CRC. Raw sockets used in the lab provide neither of those fields to the application.
-
-### 802.1Q VLAN tagging
-
-When a VLAN tag is present, the order is:
-
-| Destination MAC | Source MAC | 802.1Q header | EtherType | Payload |
-| --- | --- | --- | --- | --- |
-| 6 bytes | 6 bytes | 4 bytes | 2 bytes | variable |
-
-The 32-bit 802.1Q header used in the lab is simplified:
-
-- Most significant 16 bits: `0x8100`.
-- Least significant 12 bits: VLAN ID.
-- Four bits between them: zero in the lab.
-
-Switch behavior to remember:
-
-- Learn the source MAC address on the incoming interface and VLAN.
-- Broadcast frames go to other eligible interfaces in the same VLAN.
-- Known unicast frames go only to the learned destination interface when that entry is valid.
-- An access interface commonly receives or sends untagged frames for one VLAN.
-- A trunk interface carries tagged frames and may add or remove the tag at the boundary.
+An Ethernet frame also has a preamble and CRC. However, for this class you do not have to deal with these as the physical layer is out of scope of the labs. Further information on the preamble and CRC can be found here if desired: [Ethernet packet - physical layer](https://en.wikipedia.org/wiki/Ethernet_frame#Ethernet_packet_%E2%80%93_physical_layer)
 
 The following diagram uses 16-bit columns to show the bit widths of the Ethernet fields. The first row is the ordinary frame; the second row shows the tagged form.
 
@@ -97,20 +125,6 @@ The ordinary frame has 112 bits before its payload. The VLAN-tagged frame has 14
 #### Worked VLAN frame example
 
 Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, VLAN ID `25`, and IPv4 EtherType `0x0800`.
-
-Bits for each field:
-
-<table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><th colspan="32">Destination MAC (bits 00-31)</th><th colspan="16">Destination MAC (bits 32-47)</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-<tr><th colspan="32">Source MAC (bits 00-31)</th><th colspan="16">Source MAC (bits 32-47)</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="32">802.1Q header</th></tr>
-<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="16">EtherType</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-</table>
 
 Bytes for each field (network byte order is big-endian):
 
@@ -143,6 +157,38 @@ Expansion:
 08 00             -> EtherType = 0x0800 = IPv4
 ```
 
+#### Worked non-VLAN Ethernet frame example
+
+Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, and IPv4 EtherType `0x0800`. This frame has no 802.1Q header.
+
+Bytes for each field (network byte order is big-endian):
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
+<tr><th colspan="4">Destination MAC address (bytes 0-3)</th></tr>
+<tr><td>02</td><td>00</td><td>00</td><td>00</td></tr>
+<tr><th colspan="2">Destination MAC address (bytes 4-5)</th><th colspan="2">Source MAC address (bytes 0-1)</th></tr>
+<tr><td>00</td><td>02</td><td>02</td><td>00</td></tr>
+<tr><th colspan="4">Source MAC address (bytes 2-5)</th></tr>
+<tr><td>00</td><td>00</td><td>00</td><td>01</td></tr>
+<tr><th colspan="2">EtherType</th></tr>
+<tr><td>08</td><td>00</td></tr>
+</table>
+
+Bytes, in network byte order (big-endian):
+
+```text
+02 00 00 00 00 02 02 00 00 00 00 01 08 00
+```
+
+Expansion:
+
+```text
+02 00 00 00 00 02 -> destination MAC = 02:00:00:00:00:02
+02 00 00 00 00 01 -> source MAC      = 02:00:00:00:00:01
+08 00             -> EtherType = 0x0800 = IPv4
+```
+
 ## 4. ARP Packets
 
 ARP maps an IPv4 address to a MAC address on the local link. Its layout is:
@@ -159,12 +205,6 @@ ARP maps an IPv4 address to a MAC address on the local link. Its layout is:
 | Target hardware address | 6 bytes | Target MAC; may be zero in a request |
 | Target protocol address | 4 bytes | Target IPv4 address |
 | Data | variable | Not needed for the basic lab |
-
-Typical exchange:
-
-1. The sender broadcasts an ARP request asking who owns the target IP.
-2. The target sends an ARP reply containing its MAC address.
-3. The sender caches the IP-to-MAC mapping and uses it to build the Ethernet frame.
 
 Bit-level ARP layout, using the same 32-bit rows as the lab README:
 
@@ -187,23 +227,9 @@ Bit-level ARP layout, using the same 32-bit rows as the lab README:
 
 Example values: Ethernet/IPv4 request, sender MAC `02:00:00:00:00:01`, sender IP `192.0.2.1`, target MAC all zeroes, and target IP `192.0.2.2`.
 
-Bits for each field:
+**Optional shared-byte note:** ARP bytes 06 04 00 01 contain hardware address length 06, protocol address length 04, and opcode 00 01.
 
-<table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><th colspan="16">Hardware type</th><th colspan="16">Protocol type</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="8">Hardware address length</th><th colspan="8">Protocol address length</th><th colspan="16">Opcode</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="48">Sender hardware address</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="32">Sender protocol address</th></tr>
-<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="48">Target hardware address</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="32">Target protocol address</th></tr>
-<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-</table>
+
 
 Bytes for each field (all multi-byte fields are in network byte order, big-endian):
 
@@ -283,19 +309,9 @@ Bit-level IPv4 header layout for the minimum 20-byte header:
 
 Example values: no options, total length `33` bytes, identification `0x1234`, do-not-fragment flag set, TTL `64`, UDP protocol `17`, source `192.0.2.1`, and destination `192.0.2.2`. The checksum below is shown as zero to keep the example focused on layout.
 
-Bits for each field:
+**Optional shared-byte note:** IPv4 byte 45 contains Version 4 and IHL 5. Bytes 40 00 contain Flags and Fragment Offset. Bytes 40 11 contain TTL and Protocol.
 
-<table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><th colspan="4">Version</th><th colspan="4">IHL</th><th colspan="8">DSCP/ECN</th><th colspan="16">Total length</th></tr>
-<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="16">Identification</th><th colspan="3">Flags</th><th colspan="13">Fragment offset</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="8">TTL</th><th colspan="8">Protocol</th><th colspan="16">Header checksum</th></tr>
-<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="32">Source address</th><th colspan="32">Destination address</th></tr>
-<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-</table>
+
 
 Bytes for each field (multi-byte fields are in network byte order, big-endian):
 
@@ -358,17 +374,9 @@ Bit-level UDP header layout:
 
 Example values: source port `4000`, destination port `1234`, payload `hello` (5 bytes), length `13`, and checksum `0`.
 
-Bits for each field:
+**Optional shared-byte note:** UDP fields are byte-aligned: source port 0f a0, destination port 04 d2, length 00 0d, checksum 00 00. No UDP header byte is split between fields.
 
-<table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><th colspan="16">Source port</th><th colspan="16">Destination port</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-<tr><th colspan="16">Length</th><th colspan="16">Checksum</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="40">Data</th></tr>
-<tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-</table>
+
 
 Bytes for each field (multi-byte fields are in network byte order, big-endian):
 
@@ -436,23 +444,9 @@ Bit-level TCP header layout for the minimum 20-byte header:
 
 Example values: source port `4000`, destination port `1234`, sequence `1`, acknowledgment `1`, data offset `5`, flags `ACK+SYN`, window `64`, checksum `0`, urgent pointer `0`, and data `hello`.
 
-Bits for each field:
+**Optional shared-byte note:** TCP bytes 50 92 00 40 group Data Offset, Reserved, ECN, Control Bits, and Window.
 
-<table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><th colspan="16">Source port</th><th colspan="16">Destination port</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
-<tr><th colspan="32">Sequence number</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="32">Acknowledgment number</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><th colspan="4">Data offset</th><th colspan="3">Reserved</th><th colspan="3">ECN</th><th colspan="6">Control bits</th><th colspan="16">Window</th></tr>
-<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="16">Checksum</th><th colspan="16">Urgent pointer</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><th colspan="40">Data</th></tr>
-<tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-</table>
+
 
 Bytes for each field (multi-byte fields are in network byte order, big-endian):
 
@@ -547,7 +541,7 @@ The IP layer adds addresses and delivery information in front of the complete UD
 
 ```text
 +----------------------+------------------------------------------+
-| IPv4 header          | IPv4 payload                             |
+| IPv4 header          |
 | 20 bytes             | UDP header + b'hello'                    |
 +----------------------+------------------------------------------+
 | Version/IHL: 4/5    | Source port: 4000                       |
@@ -573,7 +567,7 @@ Before transmission, the link layer selects the next-hop MAC address. If the map
 
 ```text
 +----------------------+----------------------+----------+----------------------+
-| Destination MAC      | Source MAC           | EtherType| IPv4 payload         |
+| Destination MAC      | Source MAC           | EtherType|
 | 02:00:00:00:00:02   | 02:00:00:00:00:01   | 0x0800  | 33-byte IPv4 datagram|
 +----------------------+----------------------+----------+----------------------+
 | 6 bytes              | 6 bytes              | 2 bytes | variable             |
