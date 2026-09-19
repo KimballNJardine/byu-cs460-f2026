@@ -173,23 +173,23 @@ sudo ovs-appctl fdb/flush s2
      `Ctrl-c to quit`.  Now enter `Ctrl`-`c`.  Then re-start the network with
      the following:
 
-    ```bash
-    cougarnet --display --disable-ipv6 h6-s2-vlan.cfg
-    ```
+     ```bash
+     cougarnet --display --disable-ipv6 h6-s2-vlan.cfg
+     ```
 
      Note that you haven't enabled firewalls as you did
      [previously](#prepare-the-host-for-link-layer-analysis).
      Now run the following from host `b`:
 
-    ```bash
-    ping -c 5 -W 1 10.0.0.5
-    ```
+     ```bash
+     ping -c 5 -W 1 10.0.0.5
+     ```
 
      Then:
 
-    ```bash
-    ping -c 5 -W 1 10.0.0.3
-    ```
+     ```bash
+     ping -c 5 -W 1 10.0.0.3
+     ```
 
      What are the results of pinging `e` (10.0.0.5) and pinging `c` (10.0.0.3)?
 
