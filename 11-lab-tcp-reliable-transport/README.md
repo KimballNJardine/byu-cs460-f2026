@@ -700,7 +700,6 @@ First, test your TCP implementation to transfer the very small file `hello.txt`
 over the TCP connection:
 
 ```bash
-# $
 cougarnet --wireshark a-b --vars loss=0,window=10000,file=hello.txt,fast_retransmit=off scenario1.cfg
 ```
 
@@ -710,14 +709,12 @@ sequence, acknowledgment numbers, and segment lengths look correct.  Then check
 that it was actually received properly:
 
 ```bash
-# $
 cat downloads/hello.txt
 ```
 ```
 hello world
 ```
 ```bash
-# $
 sha1sum hello.txt downloads/hello.txt
 ```
 ```
@@ -732,7 +729,6 @@ the TCP connection without any loss using a fixed congestion window size of
 10,000 bytes:
 
 ```bash
-# $
 cougarnet --wireshark a-b --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
 
@@ -742,7 +738,6 @@ The file should transfer in no more than a second or two, and it should be in
 tact:
 
 ```bash
-# $
 sha1sum test.txt downloads/test.txt
 ```
 ```
@@ -753,14 +748,12 @@ e742dc9de5bac34d82117e015f597378a205e5c1  downloads/test.txt
 When this is working, test on an even larger file, `byu-y-mtn.jpg`:
 
 ```bash
-# $
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
 This one should transfer in roughly 15 seconds and should also be in tact:
 
 ```bash
-# $
 sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 ```
 ```
@@ -772,7 +765,6 @@ Finally, transfer the image file again with a larger window size of 50,000
 bytes:
 
 ```bash
-# $
 cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
@@ -789,7 +781,6 @@ Test your TCP implementation to transfer the file `test.txt` over the
 TCP connection with a 5% loss rate each direction:
 
 ```bash
-# $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
 
@@ -800,7 +791,6 @@ When this is working, test on a larger file, `byu-y-mtn.jpg`, with lower loss
 rate and larger congestion window:
 
 ```bash
-# $
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
@@ -815,7 +805,6 @@ When transmissions are working, with and without loss, make sure they are all
 working with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
@@ -847,7 +836,6 @@ Test your fast retransmit functionality, but first running the tests without
 packet loss, to make sure they still work as expected:
 
 ```bash
-# $
 cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
 cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
@@ -856,7 +844,6 @@ cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --ter
 Running the tests with packet loss _should_ result in faster transmission times:
 
 ```bash
-# $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on scenario1.cfg
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scenario1.cfg
 ```
@@ -865,7 +852,6 @@ Specifically, the file `test.txt` should transfer in no more than a second or
 two, and it should be in tact:
 
 ```bash
-# $
 sha1sum test.txt downloads/test.txt
 ```
 ```
@@ -883,7 +869,6 @@ the very least, however, the transfer time should not be expected to increase.
 Also, the file should be in tact:
 
 ```bash
-# $
 sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 ```
 ```
@@ -894,7 +879,6 @@ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 Finally test with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
 cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
 ```
@@ -952,7 +936,6 @@ you to specify a congestion control algorithm on the command line, e.g.,
 Run the following command to run the file transfer with no loss:
 
 ```bash
-# $
 cougarnet --wireshark a-b --vars loss=0,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
 
@@ -975,7 +958,6 @@ If everything looks good, click "Save As...", and save the file as
 Now run the following command to test with 0.1% loss:
 
 ```bash
-# $
 cougarnet --wireshark a-b --vars loss=0.1,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
 
@@ -1007,7 +989,6 @@ Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
 ```bash
-# $
 mkdir tcp-lab
 cp buffer.py mysocket.py tcp-lab
 tar -zcvf tcp-lab.tar.gz tcp-lab
@@ -1017,7 +998,6 @@ If you have done Part 5, please use these commands to also include your image
 files.
 
 ```bash
-# $
 mkdir tcp-lab
 cp buffer.py mysocket.py tahoe-noloss.png tahoe-someloss.png tcp-lab
 tar -zcvf tcp-lab.tar.gz tcp-lab

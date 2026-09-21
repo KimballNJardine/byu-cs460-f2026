@@ -23,7 +23,6 @@ TCP Fast Open (TFO).
 Make sure that `curl` is installed.
 
 ```bash
-# $
 sudo apt install curl
 ```
 
@@ -36,7 +35,6 @@ two hosts, `a` and `b`, connected to switch `s1`.
 Run the following command to create and start the network:
 
 ```bash
-# $
 cougarnet --display --wireshark=a-s1 h2-s1.cfg
 ```
 
@@ -51,14 +49,12 @@ following command on host `b` to start an HTTP server listening for incoming
 HTTP requests on port 8000:
 
 ```bash
-# b$
 python3 -m http.server
 ```
 
 On host `a` run the following:
 
 ```bash
-# a$
 curl -o /dev/null http://10.0.0.2:8000/byu-y-mtn.jpg
 ```
 
@@ -161,7 +157,6 @@ On host `b` enter `Ctrl`+`c` to stop the HTTP server.  Then start an
 interactive Python shell on host `b` by entering the following:
 
 ```bash
-# b$
 python3
 ```
 
@@ -183,7 +178,6 @@ We will do that next, from host `a`.
 On host `a` run the following to start an interactive Python shell:
 
 ```bash
-# a$
 python3
 ```
 

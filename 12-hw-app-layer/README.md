@@ -26,14 +26,12 @@ application-layer protocols such as HTTP, DNS, and SMTP.
     `/etc/hosts.bak`:
  
     ```bash
-    # $
     sudo cp -pr /etc/hosts{,.bak}
     ```
 
     Now open `/etc/hosts` with root privileges, e.g.:
 
     ```bash
-    # $
     sudo -e /etc/hosts
     ```
 
@@ -54,7 +52,6 @@ application-layer protocols such as HTTP, DNS, and SMTP.
  2. Begin Packet Capture.  Open Wireshark:
 
     ```bash
-    # $
     wireshark
     ```
 
@@ -68,7 +65,6 @@ application-layer protocols such as HTTP, DNS, and SMTP.
     CGI-enabled from within the homework directory:
 
     ```bash
-    # $
     python3 -m http.server --cgi
     ```
 
@@ -92,7 +88,6 @@ application-layer protocols such as HTTP, DNS, and SMTP.
  6. "Update" `test.txt` by running the following command:
 
     ```bash
-    # $
     touch test.txt
     ```
     (The `touch` command simply updates the timestamp of the specified file, so
@@ -192,7 +187,6 @@ depending on the presence of the `-l` option.  When the script is run with the
     Run the following command to create and start the network:
 
     ```bash
-    # $
     cougarnet --display --wireshark=a-b h2-s1.cfg
     ```
 
@@ -200,14 +194,12 @@ depending on the presence of the `-l` option.  When the script is run with the
     start the echo server:
 
     ```bash
-    # b$
     python3 tfo_echo.py -l 5599
     ```
 
     On host `a`, running the following to run the client:
 
     ```bash
-    # a$
     python3 tfo_echo.py 10.0.0.2 5599 foobar
     ```
 
@@ -241,7 +233,6 @@ Use `Ctrl`-`c` on host `b` to interrupt the running echo server.  Then run
 the following on both host `a` and host `b`:
 
 ```bash
-# $
 sudo sysctl net.ipv4.tcp_fastopen=3
 ```
 
@@ -254,7 +245,6 @@ Restart the server on host `b` with the following command (note the presence of
 the `-f` option):
 
 ```bash
-# b$
 python3 tfo_echo.py -f -l 5599
 ```
 
@@ -262,7 +252,6 @@ Now run the client again on host `a` with the following command (note the
 presence of the `-f` option):
 
 ```bash
-# a$
 python3 tfo_echo.py -f 10.0.0.2 5599 foobar
 ```
 
@@ -278,14 +267,12 @@ recent test.
 Finally, restart the server on host `b` with the following command:
 
 ```bash
-# b$
 python3 tfo_echo.py -f -l 5599
 ```
 
 Then run the following again:
 
 ```bash
-# a$
 python3 tfo_echo.py -f 10.0.0.2 5599 foobar
 ```
 
@@ -319,14 +306,12 @@ This part is an exercise to help you understand SMTP.
     Run the following command to create and start the network:
 
     ```bash
-    # $
     cougarnet --display --wireshark=a-b h2-s1.cfg
     ```
 
  3. Start a "debugging" SMTP server on host `b`:
 
     ```bash
-    # b$
     sudo python3 -m smtpd -n --class DebuggingServer 0.0.0.0:25
     ```
 
@@ -337,7 +322,6 @@ This part is an exercise to help you understand SMTP.
     message from host `a` to host `b`:
 
     ```bash
-    a$
     swaks --server 10.0.0.2 --to joe@example.com
     ```
 
@@ -345,7 +329,6 @@ This part is an exercise to help you understand SMTP.
     an email message with an attachment from host `a` to host `b`:
 
     ```bash
-    # a$
     swaks --server 10.0.0.2 --attach byu-y-mtn2.jpg --to joe@example.com
     ```
 

@@ -65,7 +65,6 @@ Take a look at the contents of `scenario1a.cfg`.  Then run the following to
 start it up:
 
 ```bash
-# $
 cougarnet --display --disable-ipv6 scenario1a.cfg
 ```
 
@@ -111,7 +110,6 @@ Now look at the contents of `scenario1.cfg`, and run the following to start it
 up:
 
 ```bash
-# $
 cougarnet --display --disable-ipv6 scenario1.cfg
 ```
 
@@ -295,7 +293,6 @@ the output for your switch implementation matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 ```
@@ -356,7 +353,6 @@ When your switch implementation is working properly, test all three scenarios
 with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 cougarnet --disable-ipv6 --terminal=none scenario3.cfg

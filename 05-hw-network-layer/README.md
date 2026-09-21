@@ -57,7 +57,6 @@ Run the following commands on host `a` to show its network interface
 configuration, IP forwarding table, and ARP table:
 
 ```bash
-# a$
 ip addr 2> /dev/null
 ip route
 ip neigh
@@ -102,7 +101,6 @@ going to a router first (i.e., the "next hop").
 Now run the following command on `a` to send a single packet from `a` to `b`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.0.2
 ```
 
@@ -135,7 +133,6 @@ Look at the Wireshark window, and sort by "Time".
 Re-run the `ip neigh` command to see the new state of `a`'s ARP table:
 
 ```bash
-# a$
 ip neigh
 ```
 
@@ -145,7 +142,6 @@ ip neigh
 Now run the following command on `a` to send a single packet from `a` to `c`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.1.2
 ```
 
@@ -160,7 +156,6 @@ tells `ping` to only wait for one second for a response.)
 Let's now add an entry to `a`'s forwarding table.  The general formula is this:
 
 ```
-# $
 sudo ip route add <prefix> via <next_hop> dev <int>
 ```
 
@@ -203,7 +198,6 @@ paragraphs to set run the default forwarding entry for host `a`.
 Again run the following command on `a` to send a single packet from `a` to `c`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.1.2
 ```
 
@@ -227,7 +221,6 @@ ping -c 1 -W 1 10.0.1.2
 Run the `ip neigh` command on `r1` to see the state of its ARP table:
 
 ```bash
-# r1$
 ip neigh
 ```
 
@@ -243,7 +236,6 @@ outside its subnet, including the ping response to `a`.
 Again run the following command on `a` to send a single packet from `a` to `c`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.1.2
 ```
 
@@ -253,7 +245,6 @@ ping -c 1 -W 1 10.0.1.2
 Run the following command on `a` to send a single packet from `a` to `e`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.3.2
 ```
 
@@ -291,7 +282,6 @@ using `ip route del`.
 Run the following command on `a` to send a single packet from `a` to `e`:
 
 ```bash
-# a$
 ping -c 1 -W 1 10.0.3.2
 ```
 
@@ -306,7 +296,6 @@ you send a datagram from `a` to destination `8.8.8.8`?  Answer the question to
 yourself before testing it.  Then run the following to actually test it:
 
 ```bash
-# a$
 ping -c 1 -W 1 8.8.8.8
 ```
 
@@ -359,7 +348,6 @@ By default, all terminals will show up, but you can adjust this with the
 Run the following to send an ICMP echo request/reply between `h1` and `h2`:
 
 ```bash
-# h1$
 ping -c 1 -W 1 10.0.1.2
 ```
 
@@ -374,7 +362,6 @@ Wireshark capture, and then respond with 1) the host or router the sent the
 ICMP error and 2) a *brief* description of why the ICMP error was sent.
 
 ```bash
-# h1$
 ping -c 1 -W 1 -t 3 10.0.1.2
 ```
 
@@ -384,7 +371,6 @@ ping -c 1 -W 1 -t 3 10.0.1.2
  26. What was the cause of the ICMP message?
 
 ```bash
-# h1$
 ping -c 1 -W 1 10.0.1.4
 ```
  27. Which device sent the ICMP message?
@@ -392,14 +378,12 @@ ping -c 1 -W 1 10.0.1.4
 
 
 ```bash
-# h1$
 ping -c 1 -W 1 10.0.3.1
 ```
  29. Which device sent the ICMP message?
  30. What was the cause of the ICMP message?
 
 ```bash
-# h1$
 dig @10.0.1.2 +timeout=1 +tries=1 . NS
 ```
 (`dig` is a command-line DNS tool.  For the purposes of this
@@ -414,7 +398,6 @@ Run the following command from `h1`, which, sends an ICMP echo request of size
 1500 to 10.0.1.2:
 
 ```bash
-# h1$
 ping -c 1 -W 1 -s 1500 -M dont 10.0.1.2
 ```
 

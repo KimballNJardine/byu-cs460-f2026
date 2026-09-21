@@ -85,7 +85,6 @@ To test the functionality of subnet-level broadcasts with the help of your
 forwarding table, you can run the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=a,b,r1 scenario1.cfg
 ```
 
@@ -99,7 +98,6 @@ To test the functionality of your forwarding table more generally, you can run
 the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario2.cfg
 ```
 
@@ -153,7 +151,6 @@ should show that each of these was received by the destination.
 To test routing using your own forwarding table, you can run the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario3.cfg
 ```
 
@@ -217,7 +214,6 @@ To test TCP connectivity between hosts separated by multiple routers, you can
 run the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario4.cfg
 ```
 
@@ -259,7 +255,6 @@ With your own switch in place, you are now ready to test the functionality of
 the network stack that you created, piece by piece.  Run the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario5.cfg
 ```
 
@@ -274,7 +269,6 @@ implementation.  Thus, it should behave in exactly the same way.
 network implementation.  Make sure it works with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario5.cfg
 ```
 
@@ -282,7 +276,6 @@ If you would like to test against a configuration that has all but the routing
 component, you can use the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario5-norouting.cfg
 ```
 
@@ -296,7 +289,6 @@ Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
 ```bash
-# $
 mkdir full-stack-lab
 cp buffer.py dvrouter.py forwarding_table.py headers.py host.py mysocket.py prefix.py switch.py transporthost.py full-stack-lab
 tar -zcvf full-stack-lab.tar.gz full-stack-lab

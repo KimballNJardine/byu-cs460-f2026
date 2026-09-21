@@ -118,7 +118,6 @@ start it up:
 Run the following command:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --display scenario1.cfg
 ```
 
@@ -318,7 +317,6 @@ the cougarnet output matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
@@ -519,7 +517,6 @@ Take a look at the contents of `scenario2.cfg`.  Then run the following to
 start it up:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario2.cfg
 ```
 
@@ -726,7 +723,6 @@ the cougarnet output matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 ```
 
@@ -802,13 +798,11 @@ following distribution:
    - 8 points for correct doctests in `prefix.py`
    - 8 points for running the following without error:
      ```bash
-     # $
      python -m doctest prefix.py
      ```
    - 8 points for correct doctests in `forwarding_table.py`
    - 8 points for running the following without error:
      ```bash
-     # $
      python -m doctest forwarding_table.py
      ```
  - Part 3: 28 points
@@ -856,7 +850,6 @@ working `switch.py` from the
 the following:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1-mine.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2-mine.cfg
 ```
@@ -920,7 +913,6 @@ proceed with checking your ARP table and sending an ARP request, if necessary.
 To test your handling of IP subnet-level broadcasts, use the following: 
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario3-opt.cfg
 ```
 
@@ -944,7 +936,6 @@ Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
 ```bash
-# $
 mkdir network-lab
 cp host.py prefix.py forwarding_table.py network-lab
 tar -zcvf network-lab.tar.gz network-lab

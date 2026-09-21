@@ -46,7 +46,6 @@ the routes learned.
 Install [pyroute2](https://pyroute2.org/) by running the following:
 
 ```bash
-# $
 sudo apt install python3-pyroute2
 ```
 
@@ -100,7 +99,6 @@ Take a look at the contents of `scenario1a.cfg`.  Then run the following to
 start it up:
 
 ```bash
-# $
 cougarnet --display --disable-ipv6 scenario1a.cfg
 ```
 
@@ -117,7 +115,6 @@ Run the following commands on host `r2` to show its network interface
 configuration and forwarding table:
 
 ```bash
-# r2$
 ip addr 2> /dev/null
 ip route
 ```
@@ -159,7 +156,6 @@ Now look at the contents of `scenario1.cfg`, and run the following to start it
 up:
 
 ```bash
-# $
 cougarnet --disable-ipv6 scenario1.cfg
 ```
 
@@ -317,7 +313,6 @@ Copy your fleshed out copy of `prefix.py` from the
 [previous lab](../06-lab-network-layer/README.md#part-2---forwarding-table):
 
 ```bash
-# $
 cp ../06-lab-network-layer/prefix.py .
 ```
 
@@ -555,7 +550,6 @@ You should not call `send_dv()` or `update_dv()` anywhere else in your code.
 Test your implementation against scenario 1:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --stop=30 scenario1.cfg
 ```
 
@@ -572,14 +566,12 @@ interrupt, the `--stop` argument will help get it under control.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
 Then proceed to test scenarios 2 and 3.
 
 ```bash
-# $
 cougarnet --disable-ipv6 --stop=30 scenario2.cfg
 cougarnet --disable-ipv6 --stop=50 scenario3.cfg
 ```
@@ -587,7 +579,6 @@ cougarnet --disable-ipv6 --stop=50 scenario3.cfg
 When all are working properly, test also with the `--terminal=none` option:
 
 ```bash
-# $
 cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 cougarnet --disable-ipv6 --terminal=none scenario3.cfg
