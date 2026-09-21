@@ -1,52 +1,57 @@
 # CS 460 Networking Reference
 
-This is a consolidated, editable reference for the packet structures and implementation helps used throughout the course. The diagrams describe the bytes handled by the labs, not every field that appears on a physical network.
+This is a consolidated reference for the packet structures implemented in CS 460. The diagrams describe the bytes handled by the labs, not every field that appears on a physical network.
 
-### Standalone Bit Layouts
+## 1. List of protocol layouts
 
-Each protocol layout is shown separately below. The columns are bit positions within a 32-bit row; fields are labeled above the space they occupy.
+Each protocol layout is shown separately below. The columns are bit positions within a 32-bit row; fields are labeled above the space they occupy. The Ethernet frame is simplified to simply show eight bits per column, with the row being all the bits in an Ethernet frame, rather than just 32 bits.
 
-#### Ethernet frame
+### Ethernet frame
 
 <table border="1">
-<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th></tr>
-<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="1">EtherType</td></tr>
+<tr><th>00</th><th>08</th><th>16</th><th>24</th><th>32</th><th>40</th><th>48</th><th>56</th><th>64</th><th>72</th><th>80</th><th>88</th><th>96</th><th>104</th></tr>
+<tr><td colspan="6">Destination MAC</td><td colspan="6">Source MAC</td><td colspan="2">EtherType</td></tr>
 </table>
 
 
-#### 802.1Q VLAN Ethernet frame
+### 802.1Q VLAN Ethernet frame
 
 <table border="1">
-<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
-<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q Header</td><td colspan="1">EtherType</td></tr>
+<tr><th>00</th><th>08</th><th>16</th><th>24</th><th>32</th><th>40</th><th>48</th><th>56</th><th>64</th><th>72</th><th>80</th><th>88</th><th>96</th><th>104</th><th>112</th><th>120</th><th>128</th><th>136</th></tr>
+<tr><td colspan="6">Destination MAC</td><td colspan="6">Source MAC</td><td colspan="4">802.1Q Header</td><td colspan="2">EtherType</td></tr>
 </table>
 
 
-#### ARP packet
+### ARP packet
 
 <table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr>
+<th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
+<th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+<th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th>
+<th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
 <tr><td colspan="16">Hardware type</td><td colspan="16">Protocol type</td></tr>
 <tr><td colspan="8">Hardware address length</td><td colspan="8">Protocol address length</td><td colspan="16">Opcode</td></tr>
-<tr><td colspan="32">Sender hardware address</td></tr>
-<tr><td colspan="32">Sender protocol address</td></tr>
-<tr><td colspan="32">Target hardware address</td></tr>
+<tr><td colspan="32">Sender hardware address (bytes 0-3)</td></tr>
+<tr><td colspan="16">Sender hardware address (bytes 4-5)</td><td colspan="16">Sender protocol address (bytes 0-1)</td></tr>
+<tr><td colspan="16">Sender protocol address (bytes 2-3)</td><td colspan="16">Target hardware address (bytes 0-1)</td></tr>
+<tr><td colspan="32">Target hardware address (bytes 2-5)</td></tr>
 <tr><td colspan="32">Target protocol address</td></tr>
 <tr><td colspan="32">Data</td></tr>
 </table>
 
-#### IPv4 header
+### IPv4 header
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
-<tr><td colspan="4">Version</td><td colspan="4">IHL</td><td colspan="8">DSCP/ECN</td><td colspan="16">Total length</td></tr>
+<tr><td colspan="4">Version</td><td colspan="4">IHL</td><td colspan="6">DSCP</td><td colspan="2">ECN</td><td colspan="16">Total length</td></tr>
 <tr><td colspan="16">Identification</td><td colspan="3">Flags</td><td colspan="13">Fragment offset</td></tr>
 <tr><td colspan="8">TTL</td><td colspan="8">Protocol</td><td colspan="16">Header checksum</td></tr>
 <tr><td colspan="32">Source address</td></tr>
 <tr><td colspan="32">Destination address</td></tr>
 </table>
 
-#### UDP header
+### UDP header
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
@@ -54,7 +59,7 @@ Each protocol layout is shown separately below. The columns are bit positions wi
 <tr><td colspan="16">Length</td><td colspan="16">Checksum</td></tr>
 </table>
 
-#### TCP header
+### TCP header
 
 <table border="1">
 <tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
@@ -66,9 +71,15 @@ Each protocol layout is shown separately below. The columns are bit positions wi
 <tr><td colspan="32">Options and padding</td></tr>
 </table>
 
-## 3. Ethernet and VLAN Frames
+### ICMP header
 
-### Ethernet frame
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="8">Type</td><td colspan="8">Code</td><td colspan="16">Checksum</td></tr>
+<tr><td colspan="32">Message-specific fields and data</td></tr>
+</table>
+
+## 2. Ethernet and VLAN Frames
 
 The raw Ethernet frame received by these labs is:
 
@@ -78,45 +89,41 @@ The raw Ethernet frame received by these labs is:
 | Source MAC address | 6 bytes | Sender on the local link |
 | 802.1Q header | 4 bytes | An optional tag to support VLANs |
 | EtherType | 2 bytes | Identifies the payload protocol |
-| Payload | variable | Usually an IPv4 datagram or ARP packet |
+| *Payload* | *variable* | Usually an IPv4 datagram or ARP packet. |
 
 An Ethernet frame also has a preamble and CRC. However, for this class you do not have to deal with these as the physical layer is out of scope of the labs. Further information on the preamble and CRC can be found here if desired: [Ethernet packet - physical layer](https://en.wikipedia.org/wiki/Ethernet_frame#Ethernet_packet_%E2%80%93_physical_layer)
 
-The following diagram uses 16-bit columns to show the bit widths of the Ethernet fields. The first row is the ordinary frame; the second row shows the tagged form.
+The following diagram uses 8-bit columns to show the bit widths of the Ethernet frames.
 
-#### Ethernet frame
+### Ethernet frame
 
 <table border="1">
-<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th></tr>
-<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="1">EtherType</td></tr>
+<tr><th>00</th><th>08</th><th>16</th><th>24</th><th>32</th><th>40</th><th>48</th><th>56</th><th>64</th><th>72</th><th>80</th><th>88</th><th>96</th><th>104</th></tr>
+<tr><td colspan="6">Destination MAC</td><td colspan="6">Source MAC</td><td colspan="2">EtherType</td></tr>
 </table>
 
 
-#### 802.1Q VLAN Ethernet frame
+### 802.1Q VLAN Ethernet frame
 
 <table border="1">
-<tr><th>00</th><th>16</th><th>32</th><th>48</th><th>64</th><th>80</th><th>96</th><th>112</th><th>128</th></tr>
-<tr><td colspan="3">Destination MAC</td><td colspan="3">Source MAC</td><td colspan="2">802.1Q Header</td><td colspan="1">EtherType</td></tr>
+<tr><th>00</th><th>08</th><th>16</th><th>24</th><th>32</th><th>40</th><th>48</th><th>56</th><th>64</th><th>72</th><th>80</th><th>88</th><th>96</th><th>104</th><th>112</th><th>120</th><th>128</th><th>136</th></tr>
+<tr><td colspan="6">Destination MAC</td><td colspan="6">Source MAC</td><td colspan="4">802.1Q Header</td><td colspan="2">EtherType</td></tr>
 </table>
 
-#### Worked VLAN frame example
+### Worked VLAN frame example
 
 Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, VLAN ID `25`, and IPv4 EtherType `0x0800`.
 
 **Bytes for each field (network byte order is big-endian):**
 
 <table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
-<tr><th colspan="4">Destination MAC address (bytes 0-3)</th></tr>
-<tr><td>02</td><td>00</td><td>00</td><td>00</td></tr>
-<tr><th colspan="2">Destination MAC address (bytes 4-5)</th><th colspan="2">Source MAC address (bytes 0-1)</th></tr>
-<tr><td>00</td><td>02</td><td>02</td><td>00</td></tr>
-<tr><th colspan="4">Source MAC address (bytes 2-5)</th></tr>
-<tr><td>00</td><td>00</td><td>00</td><td>01</td></tr>
-<tr><th colspan="4">802.1Q header</th></tr>
-<tr><td>81</td><td>00</td><td>00</td><td>19</td></tr>
-<tr><th colspan="2">EtherType</th></tr>
-<tr><td>08</td><td>00</td></tr>
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th></tr>
+<tr><th colspan="6">Destination MAC address</th></tr>
+<tr><td>02</td><td>00</td><td>00</td><td>00</td><td>00</td><td>02</td></tr>
+<tr><th colspan="6">Source MAC address</th></tr>
+<tr><td>02</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td></tr>
+<tr><th colspan="4">802.1Q header</th><th colspan="2">EtherType</th></tr>
+<tr><td>81</td><td>00</td><td>00</td><td>19</td><td>08</td><td>00</td></tr>
 </table>
 
 Bytes, in network byte order (big-endian):
@@ -134,20 +141,18 @@ Expansion:
 08 00             -> EtherType = 0x0800 = IPv4
 ```
 
-#### Worked non-VLAN Ethernet frame example
+### Worked non-VLAN Ethernet frame example
 
 Example values: destination MAC `02:00:00:00:00:02`, source MAC `02:00:00:00:00:01`, and IPv4 EtherType `0x0800`. This frame has no 802.1Q header.
 
 **Bytes for each field (network byte order is big-endian):**
 
 <table border="1">
-<tr><th>00</th><th>01</th><th>02</th><th>03</th></tr>
-<tr><th colspan="4">Destination MAC address (bytes 0-3)</th></tr>
-<tr><td>02</td><td>00</td><td>00</td><td>00</td></tr>
-<tr><th colspan="2">Destination MAC address (bytes 4-5)</th><th colspan="2">Source MAC address (bytes 0-1)</th></tr>
-<tr><td>00</td><td>02</td><td>02</td><td>00</td></tr>
-<tr><th colspan="4">Source MAC address (bytes 2-5)</th></tr>
-<tr><td>00</td><td>00</td><td>00</td><td>01</td></tr>
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th></tr>
+<tr><th colspan="6">Destination MAC address</th></tr>
+<tr><td>02</td><td>00</td><td>00</td><td>00</td><td>00</td><td>02</td></tr>
+<tr><th colspan="6">Source MAC address</th></tr>
+<tr><td>02</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td></tr>
 <tr><th colspan="2">EtherType</th></tr>
 <tr><td>08</td><td>00</td></tr>
 </table>
@@ -166,7 +171,7 @@ Expansion:
 08 00             -> EtherType = 0x0800 = IPv4
 ```
 
-## 4. ARP Packets
+## 3. ARP Packets
 
 ARP maps an IPv4 address to a MAC address on the local link. Its layout is:
 
@@ -181,7 +186,7 @@ ARP maps an IPv4 address to a MAC address on the local link. Its layout is:
 | Sender protocol address | 4 bytes | Sender IPv4 address |
 | Target hardware address | 6 bytes | Target MAC; may be zero in a request |
 | Target protocol address | 4 bytes | Target IPv4 address |
-| Data | variable | Not needed for the basic lab |
+| *Data* | *variable* | Not needed for the basic lab |
 
 Bit-level ARP layout, using the same 32-bit rows as the lab README:
 
@@ -193,14 +198,15 @@ Bit-level ARP layout, using the same 32-bit rows as the lab README:
 <th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
 <tr><td colspan="16">Hardware type</td><td colspan="16">Protocol type</td></tr>
 <tr><td colspan="8">Hardware address length</td><td colspan="8">Protocol address length</td><td colspan="16">Opcode</td></tr>
-<tr><td colspan="32">Sender hardware address</td></tr>
-<tr><td colspan="32">Sender protocol address</td></tr>
-<tr><td colspan="32">Target hardware address</td></tr>
+<tr><td colspan="32">Sender hardware address (bytes 0-3)</td></tr>
+<tr><td colspan="16">Sender hardware address (bytes 4-5)</td><td colspan="16">Sender protocol address (bytes 0-1)</td></tr>
+<tr><td colspan="16">Sender protocol address (bytes 2-3)</td><td colspan="16">Target hardware address (bytes 0-1)</td></tr>
+<tr><td colspan="32">Target hardware address (bytes 2-5)</td></tr>
 <tr><td colspan="32">Target protocol address</td></tr>
 <tr><td colspan="32">Data</td></tr>
 </table>
 
-#### Worked ARP request example
+### Worked ARP request example
 
 Example values: Ethernet/IPv4 request, sender MAC `02:00:00:00:00:01`, sender IP `192.0.2.1`, target MAC all zeroes, and target IP `192.0.2.2`.
 
@@ -224,8 +230,6 @@ Example values: Ethernet/IPv4 request, sender MAC `02:00:00:00:00:01`, sender IP
 <tr><td>c0</td><td>00</td><td>02</td><td>02</td></tr>
 </table>
 
-**Shared byte note:** ARP bytes ``06 04 00 01`` contain hardware address length ``06``, protocol address length ``04``, and opcode ``00 01``.
-
 Bytes, in network byte order (big-endian):
 
 ```text
@@ -247,7 +251,7 @@ c0 00 02 01       -> sender IP  = 192:000:002:001
 c0 00 02 02       -> target IP  = 192:000:002:002
 ```
 
-## 5. IPv4 Datagrams
+## 4. IPv4 Datagrams
 
 An IPv4 datagram consists of an IPv4 header followed by its payload. The minimum IPv4 header is 20 bytes.
 
@@ -255,8 +259,8 @@ An IPv4 datagram consists of an IPv4 header followed by its payload. The minimum
 | --- | ---: | --- |
 | Version | 4 bits | IPv4 value is 4 |
 | IHL | 4 bits | Header length in 32-bit words; 5 means 20 bytes |
-| DSCP | 6 bits | In this class, set to 0 |
-| ECN | 2 bits | In this class, set to 0 |
+| DSCP | 6 bits | In this class, set to `0` |
+| ECN | 2 bits | In this class, set to `0` |
 | Total length | 2 bytes | IPv4 header plus payload |
 | Identification | 2 bytes | Fragmentation support |
 | Flags | 3 bits | Fragmentation control |
@@ -267,7 +271,7 @@ An IPv4 datagram consists of an IPv4 header followed by its payload. The minimum
 | Source address | 4 bytes | Sender IPv4 address |
 | Destination address | 4 bytes | Receiver IPv4 address |
 | Options and padding | variable | Included only when IHL is greater than 5 |
-| Payload | variable | UDP, TCP, ICMP, or another protocol |
+| *Payload* | *variable* | UDP, TCP, ICMP, or another protocol |
 
 Bit-level IPv4 header layout for the minimum 20-byte header:
 
@@ -281,7 +285,7 @@ Bit-level IPv4 header layout for the minimum 20-byte header:
 <tr><td colspan="32">Options and padding :::</td></tr>
 </table>
 
-#### Worked IPv4 datagram example
+### Worked IPv4 datagram example
 
 Example values: no options, total length `33` bytes, identification `0x1234`, do-not-fragment flag set, TTL `64`, UDP protocol `17`, source `192.0.2.1`, and destination `192.0.2.2`. The checksum below is shown as zero to keep the example focused on layout.
 
@@ -324,7 +328,40 @@ c0 00 02 01 -> source IP      = 192:000:002:001
 c0 00 02 02 -> destination IP = 192:000:002:002
 ```
 
-## 7. UDP Datagrams
+## 5. ICMP Packets
+
+ICMP is carried directly inside IPv4 and is used by tools such as `ping` to test reachability. The IPv4 Protocol field is `1` for ICMP. The labs observe ICMP packets in network-layer and routing scenarios, but do not implement an ICMP socket - this is an extra credit component to implement in the Transport Layer lab.
+
+### Common ICMP header
+
+The first four bytes are common to ICMP messages:
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="8">Type</td><td colspan="8">Code</td><td colspan="16">Checksum</td></tr>
+<tr><td colspan="32">Message-specific fields and data</td></tr>
+</table>
+
+### Echo request and reply
+
+The ICMP messages used by `ping` have these type values:
+
+| Message | Type | Code |
+| --- | ---: | ---: |
+| Echo reply | `0` | `0` |
+| Echo request | `8` | `0` |
+
+For echo messages, the message-specific portion normally contains a 16-bit identifier, a 16-bit sequence number, and optional data:
+
+<table border="1">
+<tr><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr><td colspan="16">Identifier</td><td colspan="16">Sequence number</td></tr>
+<tr><td colspan="32">Optional echo data</td></tr>
+</table>
+
+The checksum covers the ICMP message, including its header and data. An echo reply copies the request's identifier, sequence number, and data so the sender can match the response to the request.
+
+## 6. UDP Datagrams
 
 The UDP header is 8 bytes and is followed by application data.
 
@@ -334,7 +371,7 @@ The UDP header is 8 bytes and is followed by application data.
 | Destination port | 2 bytes | Receiving application port |
 | Length | 2 bytes | UDP header plus UDP payload |
 | Checksum | 2 bytes | Set to zero in the transport lab |
-| Data | variable | Application payload |
+| *Data* | *variable* | Application payload |
 
 Bit-level UDP header layout:
 
@@ -344,7 +381,7 @@ Bit-level UDP header layout:
 <tr><td colspan="16">Length</td><td colspan="16">Checksum</td></tr>
 </table>
 
-#### Worked UDP datagram example
+### Worked UDP datagram example
 
 Example values: source port `4000`, destination port `1234`, payload `hello` (5 bytes), length `13`, and checksum `0`.
 
@@ -378,7 +415,7 @@ Expansion:
 68 65 6c 6c 6f -> data = h e l l o
 ```
 
-## 8. TCP Segments
+## 7. TCP Segments
 
 The TCP header is at least 20 bytes and is followed by application data. TCP fields are shown in 32-bit rows in the lab documentation.
 
@@ -395,8 +432,8 @@ The TCP header is at least 20 bytes and is followed by application data. TCP fie
 | Window | 2 bytes | Advertised receive window; 64 is used as a reasonable lab value |
 | Checksum | 2 bytes | Set to zero in the transport lab |
 | Urgent pointer | 2 bytes | Not used in the lab |
-| Options and padding | variable | Makes the header a multiple of 4 bytes |
-| Data | variable | Application payload |
+| Options and padding | *variable* | Makes the header a multiple of 4 bytes |
+| *Data* | *variable* | Application payload |
 
 Bit-level TCP header layout for the minimum 20-byte header:
 
@@ -410,7 +447,7 @@ Bit-level TCP header layout for the minimum 20-byte header:
 <tr><td colspan="32">Options and padding :::</td></tr>
 </table>
 
-#### Worked TCP segment example
+### Worked TCP segment example
 
 Example values: source port `4000`, destination port `1234`, sequence `1`, acknowledgment `1`, data offset `5`, flags `ACK+SYN`, window `64`, checksum `0`, urgent pointer `0`, and data `hello`.
 
@@ -458,7 +495,7 @@ Expansion:
 68 65 6c 6c 6f -> data = h e l l o
 ```
 
-## 11. Full Example
+## 8. Full Example
 
 Suppose host `10.0.0.1` sends `b'hello'` from UDP port `4000` to port `1234` at `10.0.0.2`. Use source MAC `02:00:00:00:00:01` and destination MAC `02:00:00:00:00:02` for this example.
 
@@ -567,7 +604,7 @@ The complete transmitted bytes, omitting the physical Ethernet preamble and CRC 
 0f a0 04 d2 00 0d 00 00 68 65 6c 6c 6f
 ```
 
-## 12. Constants and Conversions
+## 9. Constants and Conversions
 
 | Item | Value |
 | --- | --- |
@@ -586,7 +623,75 @@ The complete transmitted bytes, omitting the physical Ethernet preamble and CRC 
 
 Use binary/network representations on the wire and presentation strings in configuration, logs, and user-facing output.
 
-## 13. Various Notes
+### Shared Protocol Constants
+
+These values are used across the network-layer, transport-layer, and full-stack labs.
+
+| Constant | Value | Meaning |
+| --- | ---: | --- |
+| `ETH_P_IP` | `0x0800` | Ethernet payload is IPv4 |
+| `ETH_P_ARP` | `0x0806` | Ethernet payload is ARP |
+| `ARPHRD_ETHER` | `1` | ARP hardware type is Ethernet |
+| `ARPOP_REQUEST` | `1` | ARP request |
+| `ARPOP_REPLY` | `2` | ARP reply |
+| `IPPROTO_ICMP` | `1` | IPv4 payload is ICMP |
+| `IPPROTO_TCP` | `6` | IPv4 payload is TCP |
+| `IPPROTO_UDP` | `17` | IPv4 payload is UDP |
+| `IP_HEADER_LEN` | `20` bytes | Minimum IPv4 header used by the labs |
+| `UDP_HEADER_LEN` | `8` bytes | UDP header length |
+| `TCP_HEADER_LEN` | `20` bytes | TCP header length without options |
+| `UDPIP_HEADER_LEN` | `28` bytes | IPv4 header plus UDP header |
+| `TCPIP_HEADER_LEN` | `40` bytes | IPv4 header plus TCP header |
+
+### ICMP Constants
+
+These ICMP values are used by the `ping` echo messages observed in the network-layer and routing labs.
+
+| Constant or field value | Value | Meaning |
+| --- | ---: | --- |
+| `IPPROTO_ICMP` | `1` | IPv4 payload is ICMP |
+| ICMP echo reply type | `0` | Echo reply |
+| ICMP echo request type | `8` | Echo request |
+| ICMP echo code | `0` | Normal echo request/reply code |
+
+### Transport-Lab Constants
+
+These values are specific to the transport socket labs rather than universal protocol values.
+
+| Constant | Value | Meaning |
+| --- | ---: | --- |
+| `TCP_RECEIVE_WINDOW` | `64` bytes | Receive window used by the lab headers |
+| `TCP_FLAGS_SYN` | `0x02` | Synchronize sequence numbers |
+| `TCP_FLAGS_RST` | `0x04` | Reset a TCP connection |
+| `TCP_FLAGS_ACK` | `0x10` | Acknowledgment field is valid |
+
+TCP state constants used by the lab socket implementation:
+
+| Constant | Value | Meaning |
+| --- | ---: | --- |
+| `TCP_STATE_LISTEN` | `0` | Waiting for a connection request |
+| `TCP_STATE_SYN_SENT` | `1` | SYN sent; waiting for a response |
+| `TCP_STATE_SYN_RECEIVED` | `2` | SYN received; handshake not complete |
+| `TCP_STATE_ESTABLISHED` | `3` | Connection is open |
+| `TCP_STATE_FIN_WAIT_1` | `4` | Local close initiated |
+| `TCP_STATE_FIN_WAIT_2` | `5` | Local FIN acknowledged |
+| `TCP_STATE_CLOSE_WAIT` | `6` | Remote close received |
+| `TCP_STATE_CLOSING` | `7` | Both sides are closing |
+| `TCP_STATE_LAST_ACK` | `8` | Waiting for final acknowledgment |
+| `TCP_STATE_TIME_WAIT` | `9` | Waiting before final cleanup |
+| `TCP_STATE_CLOSED` | `10` | No connection exists |
+
+### Routing-Lab Constants
+
+These values are implementation timers and port assignments for the distance-vector routing lab.
+
+| Constant | Value | Meaning |
+| --- | ---: | --- |
+| `DV_PORT` | `5016` | UDP port used for distance-vector messages |
+| `DV_TABLE_SEND_INTERVAL` | `1` | Seconds between DV advertisements |
+| `NEIGHBOR_CHECK_INTERVAL` | `3` | Seconds for checking neighbor activity |
+
+## 10. Various Notes
 
 ### Endianness
 
@@ -609,6 +714,7 @@ These are the main protocol combinations used in the labs:
 ```text
 Ethernet Frame -> IPv4 -> UDP
 Ethernet Frame -> IPv4 -> TCP
+Ethernet Frame -> IPv4 -> ICMP
 Ethernet Frame -> ARP
 ```
 
