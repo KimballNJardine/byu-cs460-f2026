@@ -46,7 +46,11 @@ might need to adapt these instructions.
     c. ISO Image: Select the install image (`.iso` file) you downloaded in
        step 2.
 
-    d. Check the box labeled "Skip Unattended Installation".
+    d. Uncheck the box labeled "Proceed with Unattended Installation".
+
+       (If you instead see a checkbox labeled "Skip Unattended Installation",
+       you should *check* the box instead.  Some versions of VirtualBox present
+       it that way.)
 
     Click "Next".
 
