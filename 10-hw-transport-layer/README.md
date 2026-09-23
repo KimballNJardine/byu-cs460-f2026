@@ -22,8 +22,8 @@ TCP Fast Open (TFO).
 
 Make sure that `curl` is installed.
 
-```
-$ sudo apt install curl
+```bash
+sudo apt install curl
 ```
 
 
@@ -49,13 +49,13 @@ following command on host `b` to start an HTTP server listening for incoming
 HTTP requests on port 8000:
 
 ```bash
-b$ python3 -m http.server
+python3 -m http.server
 ```
 
 On host `a` run the following:
 
 ```bash
-a$ curl -o /dev/null http://10.0.0.2:8000/byu-y-mtn.jpg
+curl -o /dev/null http://10.0.0.2:8000/byu-y-mtn.jpg
 ```
 
 This will request the file `byu-y-mtn.jpg` from 10.0.0.2 (host `b`) port 8000
@@ -157,7 +157,7 @@ On host `b` enter `Ctrl`+`c` to stop the HTTP server.  Then start an
 interactive Python shell on host `b` by entering the following:
 
 ```bash
-b$ python3
+python3
 ```
 
 Enter the following into the interactive Python shell opened on host `b`:
@@ -178,7 +178,7 @@ We will do that next, from host `a`.
 On host `a` run the following to start an interactive Python shell:
 
 ```bash
-a$ python3
+python3
 ```
 
 Enter the following into the interactive Python shell opened on host `a`:
