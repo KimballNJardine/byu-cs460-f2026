@@ -27,6 +27,7 @@ between TCP sockets connected over a TCP connection.
  - [Part 5 - TCP Tahoe (Extra Credit)](#part-5---tcp-tahoe-extra-credit)
    - [Instructions](#instructions-4)
    - [Testing](#testing-4)
+ - [Evaluation](#evaluation)
  - [Submission](#submission)
 
 
@@ -981,6 +982,16 @@ the Time Sequence graph.
 Finally, make sure that your files transferred correctly and that your
 implementation still works as expected with Parts [3](#testing-2) and
 [4](#testing-3).
+
+
+# Evaluation
+
+Your score will be computed out of a maximum of 100 points based on the
+following distribution:
+
+ - Part 1: 70 points
+ - Part 2: 30 points
+ - Part 3: 6 points (extra credit)
 
 
 # Submission
