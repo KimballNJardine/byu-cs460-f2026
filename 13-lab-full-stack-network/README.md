@@ -289,9 +289,7 @@ lesser credit.
 Your score will be computed out of a maximum of 100 points based on the
 following distribution:
 
- - Part 1: 70 points
- - Part 2: 30 points
- - Part 3: 6 points (extra credit)
+ TBD
 
 
 # Submission
