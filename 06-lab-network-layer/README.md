@@ -325,7 +325,8 @@ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 
 ### Ethernet Frames
 
-See the documentation for the Link-Layer lab for
+See the [Networking Reference](../NETWORKING_REFERENCE.md#ethernet) 
+and the documentation for the Link-Layer lab for
 [additional helps for Ethernet frames](../04-lab-link-layer/README.md#ethernet-frames).
 
 
@@ -384,6 +385,8 @@ Regarding the fields:
    they are referred to in the instructions as "MAC" and "IP" since those are
    the protocols we are working with.
 
+See the [Networking Reference](../NETWORKING_REFERENCE.md#arp-packet) for more
+information on ARP packets.
 
 ### Address Representation Conversion
 
@@ -762,6 +765,8 @@ instances.  The packet that you will be receiving looks like this:
 <td colspan="32">Options and padding :::</td></tr>
 </table>
 
+See the [Networking Reference](../NETWORKING_REFERENCE.md#ipv4-header) for more
+information on IPv4 packets.
 
 ### Address Representation Conversion
 

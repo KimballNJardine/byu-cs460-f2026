@@ -430,6 +430,8 @@ ID.  The 4 bits in between can be left as zero.
 Note that there are libraries, including scapy, for parsing Ethernet frames and
 higher-level packets, but you may not use them for the lab.
 
+See the [Networking Reference](../NETWORKING_REFERENCE.md#ethernet) for
+additional information on Ethernet frames.
 
 ## Working with `bytes` Instances
 
