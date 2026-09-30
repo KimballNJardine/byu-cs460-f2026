@@ -59,9 +59,6 @@ to focus on the link layer.
 
 Run the following in host `b`:
 
-(Note that `b$` is simply the prompt associated with host `b`; you should not
-include that in your command.)
-
 ```bash
 sudo ip neigh add 10.0.0.5 lladdr 00:00:00:ee:ee:ee dev b-s1
 sudo iptables -I INPUT -j DROP
