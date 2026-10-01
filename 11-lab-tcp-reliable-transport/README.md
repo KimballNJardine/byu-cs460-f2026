@@ -700,6 +700,7 @@ but your code should get past this okay.
 First, test your TCP implementation to transfer the very small file `hello.txt`
 over the TCP connection:
 
+```bash
 cougarnet --wireshark a-b --vars loss=0,window=10000,file=hello.txt,fast_retransmit=off scenario1.cfg
 ```
 
