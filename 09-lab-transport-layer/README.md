@@ -198,6 +198,9 @@ wide.
  - Destination IP address
  - Options and padding ::: - Not used.
 
+See the [Networking Reference](../NETWORKING_REFERENCE.md#ipv4-header) for more
+information on the IPv4 header.
+
 #### UDP Header
 
 Please note that the diagram describing the UDP header is 32 bits (columns)
@@ -221,6 +224,9 @@ wide.
  - Length - This is the length of the entire UDP datagram, including UDP header and payload.
  - Checksum - The checksum of a pseudo IPv4 header.  For the purposes of this lab, we will
    not be calculating a UDP checksum, so 0 can be used here.
+
+See the [Networking Reference](../NETWORKING_REFERENCE.md#udp-header) for more
+information on the UDP header.
 
 #### TCP Header
 
@@ -276,6 +282,8 @@ wide.
    not be calculating a TCP checksum, so 0 can be used here.
  - Urgent Pointer - Not used for this lab, so this field can always be 0.
 
+See the [Networking Reference](../NETWORKING_REFERENCE.md#tcp-header) for more
+information on the TCP header.
 
 ### Step 2 - Complete and Tests Code against Unit Tests
 
@@ -735,6 +743,9 @@ is below.  Please note that the diagram describing the IPv4 header is 32 bits
 <tr><td colspan="32">Unused</td></tr>
 </table>
 </table>
+
+See the [Networking Reference](../NETWORKING_REFERENCE.md#icmp-header) for more
+information on the ICMP header.
 
 In the file `test_headers.py` create a method `test_icmp_header()`, which tests
 both the `ICMPHeader.to_bytes()` and `ICMPHeader.from_bytes()` methods.  Use
